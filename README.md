@@ -1,8 +1,6 @@
+Â "This is the finance tracker app from the Complete Ruby on Rails Developer course".
+
 # README
-
- "This is the finance tracker app from the Complete Ruby on Rails Developer course".
-
-
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
