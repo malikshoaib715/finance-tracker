@@ -2,12 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-/*
-
 @layer components {
+  .card {
+    @apply rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-slate-700;
+  }
+
+  .form-input {
+    @apply mt-1 block w-full rounded-lg border-0 px-3 py-2 text-slate-900 shadow-sm ring-1 ring-inset ring-slate-300 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-emerald-600 sm:text-sm;
+  }
+
+  .form-checkbox {
+    @apply h-4 w-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-600;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2;
+  }
+
   .btn-primary {
-    @apply py-2 px-4 bg-blue-200;
+    @apply btn bg-emerald-600 text-white hover:bg-emerald-500 focus-visible:outline-emerald-600;
+  }
+
+  .btn-secondary {
+    @apply btn bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-50;
+  }
+
+  .link {
+    @apply font-medium text-emerald-700 hover:text-emerald-600;
   }
 }
-
-*/
