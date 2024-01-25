@@ -4,5 +4,32 @@
       <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white text-sm font-bold">FT</span>
       <span>Finance Tracker</span>
     <% end %>
+
+    <% if user_signed_in? %>
+      <div class="relative" data-controller="dropdown"
+           data-action="click@window->dropdown#closeOnClickOutside keydown.esc@window->dropdown#close">
+        <button type="button" data-dropdown-target="button" data-action="dropdown#toggle"
+                aria-haspopup="true" aria-expanded="false"
+                class="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-sm font-medium text-slate-700 hover:bg-slate-100">
+          <span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-700">
+            <%= current_user.email.first.upcase %>
+          </span>
+          <span class="hidden sm:inline"><%= current_user.email %></span>
+        </button>
+
+        <div data-dropdown-target="menu"
+             class="hidden absolute right-0 z-20 mt-2 w-48 rounded-lg bg-white py-1 shadow-lg ring-1 ring-slate-200">
+          <%= link_to "Account settings", edit_user_registration_path,
+                class: "block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50" %>
+          <%= button_to "Sign out", destroy_user_session_path, method: :delete,
+                class: "block w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50" %>
+        </div>
+      </div>
+    <% else %>
+      <div class="flex items-center gap-3">
+        <%= link_to "Sign in", new_user_session_path, class: "text-sm font-medium text-slate-700 hover:text-slate-900" %>
+        <%= link_to "Get started", new_user_registration_path, class: "btn-primary" %>
+      </div>
+    <% end %>
   </nav>
 </header>
