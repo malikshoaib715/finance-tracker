@@ -1,4 +1,4 @@
-<div id="flash" class="fixed top-20 right-4 z-50 flex w-full max-w-sm flex-col gap-2">
+<div id="flash" class="fixed bottom-4 right-4 z-50 flex w-full max-w-sm flex-col gap-2">
   <% flash.each do |type, message| %>
     <% styles = type.to_s == "alert" ? "bg-rose-50 text-rose-800 ring-rose-200" : "bg-emerald-50 text-emerald-800 ring-emerald-200" %>
     <div data-controller="flash" role="status"
