@@ -1,9 +1,11 @@
 ayesha:
   name: Ayesha Khan
   email: ayesha@example.com
+  confirmed_at: <%= 1.month.ago %>
   encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
 
 bilal:
   name: Bilal Ahmed
   email: bilal@example.com
+  confirmed_at: <%= 1.month.ago %>
   encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>

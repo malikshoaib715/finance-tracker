@@ -1,0 +1,8 @@
+<% if user_signed_in? && !current_user.confirmed? %>
+  <div class="bg-amber-50 border-b border-amber-200">
+    <p class="max-w-6xl mx-auto px-4 sm:px-6 py-2 text-sm text-amber-800">
+      Please confirm your email — we sent a link to <strong><%= current_user.email %></strong>.
+      <%= link_to "Resend it", new_user_confirmation_path, class: "font-medium underline" %>
+    </p>
+  </div>
+<% end %>
