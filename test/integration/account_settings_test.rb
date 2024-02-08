@@ -14,4 +14,11 @@ class AccountSettingsTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert_equal "Ayesha Khan", users(:ayesha).reload.name
   end
+
+  test "updates currency and time zone" do
+    patch user_registration_path, params: { user: { currency: "USD", time_zone: "London", current_password: "password123" } }
+    user = users(:ayesha).reload
+    assert_equal "USD", user.currency
+    assert_equal "London", user.time_zone
+  end
 end

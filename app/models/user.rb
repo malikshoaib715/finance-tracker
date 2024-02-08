@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  CURRENCIES = %w[PKR USD EUR GBP AED SAR].freeze
+
   # Include default devise modules. Others available are:
   # :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -7,6 +9,8 @@ class User < ApplicationRecord
   normalizes :name, with: ->(name) { name.squish }
 
   validates :name, presence: true, length: { maximum: 80 }
+  validates :currency, inclusion: { in: CURRENCIES }
+  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
 
   def first_name
     name.split.first
