@@ -25,7 +25,10 @@ bin/setup        # installs gems, prepares the database
 bin/dev          # runs the Rails server and the Tailwind watcher
 ```
 
-Then open http://localhost:3000.
+Then open http://localhost:3000 and sign in with the demo account created by the seeds:
+`demo@example.com` / `password123`.
+
+Emails (confirmation, password reset) open in the browser at http://localhost:3000/letter_opener.
 
 ## Running the tests
 
@@ -35,7 +38,7 @@ bin/rails test
 
 ## Roadmap
 
-- [ ] User accounts and authentication
+- [x] User accounts and authentication
 - [ ] Accounts (cash, bank, card, wallet) with balances
 - [ ] Categories and transactions
 - [ ] Monthly budgets with overspend alerts
