@@ -6,6 +6,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable
 
+  has_many :accounts, dependent: :destroy
+
   normalizes :name, with: ->(name) { name.squish }
 
   validates :name, presence: true, length: { maximum: 80 }

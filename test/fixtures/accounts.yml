@@ -1,0 +1,27 @@
+ayesha_bank:
+  user: ayesha
+  name: Meezan Current
+  kind: bank
+  currency: PKR
+  opening_balance_cents: 15000000
+
+ayesha_cash:
+  user: ayesha
+  name: Wallet cash
+  kind: cash
+  currency: PKR
+  opening_balance_cents: 850000
+
+ayesha_card:
+  user: ayesha
+  name: HBL Credit Card
+  kind: credit_card
+  currency: PKR
+  opening_balance_cents: -2500000
+
+bilal_bank:
+  user: bilal
+  name: UBL Savings
+  kind: savings
+  currency: PKR
+  opening_balance_cents: 50000000
