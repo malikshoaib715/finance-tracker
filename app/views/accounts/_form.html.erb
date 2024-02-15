@@ -1,0 +1,31 @@
+<%= form_with model: account, class: "space-y-5" do |f| %>
+  <%= render "shared/form_errors", record: account %>
+
+  <div>
+    <%= f.label :name, class: "form-label" %>
+    <%= f.text_field :name, autofocus: true, placeholder: "e.g. Meezan Current", class: "form-input" %>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <%= f.label :kind, "Type", class: "form-label" %>
+      <%= f.select :kind, Account.kinds.keys.map { |k| [ k.humanize, k ] }, {}, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :currency, class: "form-label" %>
+      <%= f.select :currency, User::CURRENCIES, {}, class: "form-input" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :opening_balance, class: "form-label" %>
+    <%= f.number_field :opening_balance, step: "0.01", value: account.opening_balance.round(2), class: "form-input sm:w-1/2" %>
+    <p class="mt-1 text-xs text-slate-500">What the account held when you started tracking it. Use a negative amount for card debt.</p>
+  </div>
+
+  <div class="flex justify-end gap-3">
+    <%= link_to "Cancel", accounts_path, class: "btn-secondary" %>
+    <%= f.submit class: "btn-primary" %>
+  </div>
+<% end %>

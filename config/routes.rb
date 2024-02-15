@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resource :dashboard, only: :show, controller: "dashboard"
+  resources :accounts, only: %i[ index new create edit update ]
 
   authenticated :user do
     root "dashboard#show", as: :authenticated_root
