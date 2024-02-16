@@ -3,6 +3,7 @@ class AccountsController < ApplicationController
 
   def index
     @accounts = current_user.accounts.active.alphabetical
+    @archived_accounts = current_user.accounts.archived.alphabetical
   end
 
   def new

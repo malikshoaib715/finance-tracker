@@ -5,4 +5,9 @@
   <div class="card mt-6">
     <%= render "form", account: @account %>
   </div>
+
+  <div class="mt-6 flex items-center justify-between rounded-xl border border-dashed border-slate-300 p-4">
+    <p class="text-sm text-slate-600">Closed this account? Archive it to hide it while keeping its history.</p>
+    <%= button_to "Archive", account_archive_path(@account), class: "btn-secondary" %>
+  </div>
 </div>
