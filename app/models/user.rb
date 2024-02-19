@@ -7,6 +7,9 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable
 
   has_many :accounts, dependent: :destroy
+  has_many :categories, dependent: :destroy
+
+  after_create_commit -> { Category.create_defaults_for(self) }
 
   normalizes :name, with: ->(name) { name.squish }
 

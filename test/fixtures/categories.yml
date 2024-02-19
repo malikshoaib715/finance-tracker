@@ -1,0 +1,23 @@
+ayesha_groceries:
+  user: ayesha
+  name: Groceries
+  kind: expense
+  color: lime
+
+ayesha_rent:
+  user: ayesha
+  name: Rent
+  kind: expense
+  color: indigo
+
+ayesha_salary:
+  user: ayesha
+  name: Salary
+  kind: income
+  color: emerald
+
+bilal_groceries:
+  user: bilal
+  name: Groceries
+  kind: expense
+  color: lime
