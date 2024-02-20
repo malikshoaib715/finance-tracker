@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resource :dashboard, only: :show, controller: "dashboard"
+  resources :categories, except: :show
   resources :accounts, only: %i[ index new create edit update ] do
     resource :archive, only: %i[ create destroy ], module: :accounts
   end

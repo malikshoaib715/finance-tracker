@@ -1,0 +1,11 @@
+<% content_for :title, "Categories" %>
+
+<div class="flex items-center justify-between">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Categories</h1>
+  <%= link_to "New category", new_category_path, class: "btn-primary" %>
+</div>
+
+<div class="mt-6 grid gap-6 md:grid-cols-2">
+  <%= render "list", title: "Expenses", kind: "expense", categories: @expense_categories %>
+  <%= render "list", title: "Income", kind: "income", categories: @income_categories %>
+</div>
