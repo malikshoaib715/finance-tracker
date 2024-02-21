@@ -4,10 +4,10 @@
 #
 # Sign in with demo@example.com / password123
 
-demo = User.find_or_initialize_by(email: "demo@example.com")
-demo.assign_attributes(name: "Demo User", password: "password123", currency: "PKR", time_zone: "Karachi")
-demo.skip_confirmation!
-demo.save!
+demo = User.find_or_create_by!(email: "demo@example.com") do |user|
+  user.assign_attributes(name: "Demo User", password: "password123", currency: "PKR", time_zone: "Karachi")
+  user.skip_confirmation!
+end
 Category.create_defaults_for(demo)
 
 puts "Seeded demo user: #{demo.email} / password123"
