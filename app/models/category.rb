@@ -13,6 +13,7 @@ class Category < ApplicationRecord
   }.freeze
 
   belongs_to :user
+  has_many :transactions, dependent: :nullify
 
   enum :kind, { expense: "expense", income: "income" }, default: :expense, validate: true
 

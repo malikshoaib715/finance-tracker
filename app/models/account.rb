@@ -1,5 +1,6 @@
 class Account < ApplicationRecord
   belongs_to :user
+  has_many :transactions, dependent: :restrict_with_error
 
   enum :kind, {
     cash: "cash", bank: "bank", credit_card: "credit_card", wallet: "wallet", savings: "savings"
@@ -27,7 +28,7 @@ class Account < ApplicationRecord
   end
 
   def balance_cents
-    opening_balance_cents
+    opening_balance_cents + transactions.income.sum(:amount_cents) - transactions.expense.sum(:amount_cents)
   end
 
   # Forms work in major units ("1500.50"); storage is in minor units.

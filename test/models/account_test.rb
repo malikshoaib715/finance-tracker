@@ -27,7 +27,7 @@ class AccountTest < ActiveSupport::TestCase
   end
 
   test "deleting a user removes their accounts" do
-    assert_difference "Account.count", -3 do
+    assert_difference({ "Account.count" => -3, "Transaction.count" => -3 }) do
       users(:ayesha).destroy
     end
   end

@@ -6,6 +6,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable
 
+  # Transactions first: accounts refuse to be destroyed while they still have any.
+  has_many :transactions, dependent: :delete_all
   has_many :accounts, dependent: :destroy
   has_many :categories, dependent: :destroy
 
