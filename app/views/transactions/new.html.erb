@@ -1,0 +1,16 @@
+<% content_for :title, "New transaction" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">New transaction</h1>
+
+  <% if @accounts.none? %>
+    <div class="card mt-6 text-center">
+      <p class="text-slate-600">Add an account first so the transaction has somewhere to go.</p>
+      <%= link_to "Add an account", new_account_path, class: "btn-primary mt-4" %>
+    </div>
+  <% else %>
+    <div class="card mt-6">
+      <%= render "form", transaction: @transaction, accounts: @accounts, categories: @categories %>
+    </div>
+  <% end %>
+</div>

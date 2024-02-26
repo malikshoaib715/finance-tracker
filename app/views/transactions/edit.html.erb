@@ -1,0 +1,14 @@
+<% content_for :title, "Edit transaction" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit transaction</h1>
+  <div class="card mt-6">
+    <%= render "form", transaction: @transaction, accounts: @accounts, categories: @categories %>
+  </div>
+
+  <div class="mt-6 flex justify-end">
+    <%= button_to "Delete transaction", transaction_path(@transaction), method: :delete,
+          form: { data: { turbo_confirm: "Delete this transaction?" } },
+          class: "text-sm font-medium text-rose-600 hover:text-rose-500" %>
+  </div>
+</div>

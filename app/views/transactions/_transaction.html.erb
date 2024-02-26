@@ -1,0 +1,14 @@
+<li id="<%= dom_id(transaction) %>">
+  <%= link_to edit_transaction_path(transaction), class: "flex items-center gap-4 px-4 py-3 hover:bg-slate-50" do %>
+    <div class="min-w-0 flex-1">
+      <p class="truncate text-sm font-medium text-slate-900"><%= transaction.description %></p>
+      <p class="mt-0.5 flex items-center gap-2 text-xs text-slate-500">
+        <%= transaction.account.name %>
+        <% if transaction.category %>
+          · <%= category_badge(transaction.category) %>
+        <% end %>
+      </p>
+    </div>
+    <%= money_tag(transaction.signed_amount_cents, transaction.account.currency, class: "text-sm font-semibold") %>
+  <% end %>
+</li>

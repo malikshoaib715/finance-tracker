@@ -1,0 +1,56 @@
+<%= form_with model: transaction, class: "space-y-5" do |f| %>
+  <%= render "shared/form_errors", record: transaction %>
+
+  <div class="grid grid-cols-2 gap-2 rounded-lg bg-slate-100 p-1 text-sm font-medium">
+    <% Transaction.kinds.each_key do |kind| %>
+      <label class="cursor-pointer">
+        <%= f.radio_button :kind, kind, class: "peer sr-only" %>
+        <span class="block rounded-md py-2 text-center text-slate-600 peer-checked:bg-white peer-checked:text-slate-900 peer-checked:shadow-sm">
+          <%= kind.humanize %>
+        </span>
+      </label>
+    <% end %>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <%= f.label :amount, class: "form-label" %>
+      <%= f.number_field :amount, step: "0.01", min: "0.01", autofocus: true,
+            value: transaction.amount&.round(2), class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :occurred_on, "Date", class: "form-label" %>
+      <%= f.date_field :occurred_on, class: "form-input" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :description, class: "form-label" %>
+    <%= f.text_field :description, placeholder: "e.g. Imtiaz weekly shop", class: "form-input" %>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <%= f.label :account_id, "Account", class: "form-label" %>
+      <%= f.collection_select :account_id, accounts, :id, :name, {}, class: "form-input" %>
+    </div>
+
+    <div>
+      <%= f.label :category_id, "Category", class: "form-label" %>
+      <%= f.grouped_collection_select :category_id,
+            categories.group_by(&:kind).map { |kind, list| [ kind.pluralize.humanize, list ] },
+            :last, :first, :id, :name, { include_blank: "Uncategorised" }, class: "form-input" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :notes, class: "form-label" %>
+    <%= f.text_area :notes, rows: 2, class: "form-input" %>
+  </div>
+
+  <div class="flex justify-end gap-3">
+    <%= link_to "Cancel", transactions_path, class: "btn-secondary" %>
+    <%= f.submit class: "btn-primary" %>
+  </div>
+<% end %>

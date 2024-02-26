@@ -1,0 +1,26 @@
+<% content_for :title, "Transactions" %>
+
+<div class="flex items-center justify-between">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Transactions</h1>
+  <%= link_to "New transaction", new_transaction_path, class: "btn-primary" %>
+</div>
+
+<% if @transactions.any? %>
+  <div class="mt-6 space-y-6">
+    <% @transactions.group_by(&:occurred_on).each do |date, transactions| %>
+      <section>
+        <h2 class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <%= date == Date.current ? "Today" : l(date, format: :long) %>
+        </h2>
+        <ul class="card divide-y divide-slate-100 p-0">
+          <%= render transactions %>
+        </ul>
+      </section>
+    <% end %>
+  </div>
+<% else %>
+  <div class="card mt-6 py-12 text-center">
+    <p class="text-slate-600">No transactions yet.</p>
+    <%= link_to "Record your first one", new_transaction_path, class: "btn-primary mt-4" %>
+  </div>
+<% end %>
