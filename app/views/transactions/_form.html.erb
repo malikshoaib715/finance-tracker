@@ -1,10 +1,11 @@
-<%= form_with model: transaction, class: "space-y-5" do |f| %>
+<%= form_with model: transaction, class: "space-y-5", data: { controller: "category-filter" } do |f| %>
   <%= render "shared/form_errors", record: transaction %>
 
   <div class="grid grid-cols-2 gap-2 rounded-lg bg-slate-100 p-1 text-sm font-medium">
     <% Transaction.kinds.each_key do |kind| %>
       <label class="cursor-pointer">
-        <%= f.radio_button :kind, kind, class: "peer sr-only" %>
+        <%= f.radio_button :kind, kind, class: "peer sr-only",
+              data: { category_filter_target: "kind", action: "category-filter#filter" } %>
         <span class="block rounded-md py-2 text-center text-slate-600 peer-checked:bg-white peer-checked:text-slate-900 peer-checked:shadow-sm">
           <%= kind.humanize %>
         </span>
@@ -38,9 +39,14 @@
 
     <div>
       <%= f.label :category_id, "Category", class: "form-label" %>
-      <%= f.grouped_collection_select :category_id,
-            categories.group_by(&:kind).map { |kind, list| [ kind.pluralize.humanize, list ] },
-            :last, :first, :id, :name, { include_blank: "Uncategorised" }, class: "form-input" %>
+      <%= f.select :category_id, {}, { include_blank: "Uncategorised" },
+            class: "form-input", data: { category_filter_target: "select" } do %>
+        <% categories.group_by(&:kind).each do |kind, list| %>
+          <optgroup label="<%= kind.pluralize.humanize %>" data-kind="<%= kind %>">
+            <%= options_from_collection_for_select(list, :id, :name, transaction.category_id) %>
+          </optgroup>
+        <% end %>
+      <% end %>
     </div>
   </div>
 
