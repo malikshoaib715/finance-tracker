@@ -1,9 +1,63 @@
 <% content_for :title, "Dashboard" %>
 
-<div class="flex items-center justify-between">
-  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Dashboard</h1>
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <div>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Dashboard</h1>
+    <p class="text-sm text-slate-500"><%= l(@month.first, format: "%B %Y") %></p>
+  </div>
+  <div class="flex gap-3">
+    <%= link_to "Add income", new_transaction_path(kind: "income"), class: "btn-secondary" %>
+    <%= link_to "Add expense", new_transaction_path(kind: "expense"), class: "btn-primary" %>
+  </div>
 </div>
 
-<div class="card mt-6 text-center py-12">
-  <p class="text-slate-600">Nothing here yet — your accounts and spending will show up on this page.</p>
+<div class="mt-6 grid gap-4 sm:grid-cols-3">
+  <div class="card">
+    <p class="text-sm text-slate-500">Income this month</p>
+    <p class="mt-1 text-2xl font-semibold"><%= money_tag(@income_cents) %></p>
+  </div>
+  <div class="card">
+    <p class="text-sm text-slate-500">Spent this month</p>
+    <p class="mt-1 text-2xl font-semibold"><%= money_tag(-@expense_cents) %></p>
+  </div>
+  <div class="card">
+    <p class="text-sm text-slate-500">Net</p>
+    <p class="mt-1 text-2xl font-semibold"><%= money_tag(@income_cents - @expense_cents) %></p>
+  </div>
+</div>
+
+<div class="mt-8 grid gap-6 lg:grid-cols-3">
+  <section class="lg:col-span-2">
+    <div class="mb-2 flex items-center justify-between">
+      <h2 class="font-semibold text-slate-900">Recent transactions</h2>
+      <%= link_to "View all", transactions_path, class: "link text-sm" %>
+    </div>
+    <% if @recent_transactions.any? %>
+      <ul class="card divide-y divide-slate-100 p-0">
+        <%= render @recent_transactions %>
+      </ul>
+    <% else %>
+      <div class="card py-10 text-center text-sm text-slate-600">Nothing recorded yet.</div>
+    <% end %>
+  </section>
+
+  <section>
+    <div class="mb-2 flex items-center justify-between">
+      <h2 class="font-semibold text-slate-900">Accounts</h2>
+      <%= link_to "Manage", accounts_path, class: "link text-sm" %>
+    </div>
+    <ul class="card divide-y divide-slate-100 p-0">
+      <% @accounts.each do |account| %>
+        <li class="flex items-center justify-between px-4 py-3 text-sm">
+          <span class="text-slate-700"><%= account.name %></span>
+          <%= money_tag(account.balance_cents, account.currency, class: "font-medium") %>
+        </li>
+      <% end %>
+      <% if @accounts.none? %>
+        <li class="px-4 py-6 text-center text-sm text-slate-600">
+          <%= link_to "Add your first account", new_account_path, class: "link" %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
 </div>

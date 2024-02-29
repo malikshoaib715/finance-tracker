@@ -18,4 +18,12 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     get root_url
     assert_select "h1", "Dashboard"
   end
+
+  test "summarises this month" do
+    sign_in users(:ayesha)
+    get dashboard_url
+    assert_select ".card", text: /Income this month\s+Rs 250,000.00/
+    assert_select ".card", text: /Spent this month\s+-Rs 69,350.00/
+    assert_select ".card", text: /Net\s+Rs 180,650.00/
+  end
 end
