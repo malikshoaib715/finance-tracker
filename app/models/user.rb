@@ -8,6 +8,7 @@ class User < ApplicationRecord
 
   # Transactions first: accounts refuse to be destroyed while they still have any.
   has_many :transactions, dependent: :delete_all
+  has_many :transfers, dependent: :delete_all
   has_many :accounts, dependent: :destroy
   has_many :categories, dependent: :destroy
 

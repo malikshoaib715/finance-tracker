@@ -37,6 +37,7 @@ class TransactionTest < ActiveSupport::TestCase
   end
 
   test "account balance includes its transactions" do
+    Transfer.delete_all
     # 150,000.00 opening + 250,000.00 salary - 65,000.00 rent
     assert_equal 33_500_000, accounts(:ayesha_bank).balance_cents
   end

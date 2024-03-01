@@ -1,0 +1,7 @@
+atm_withdrawal:
+  user: ayesha
+  from_account: ayesha_bank
+  to_account: ayesha_cash
+  amount_cents: 2000000
+  occurred_on: <%= Date.current.beginning_of_month + 4 %>
+  description: ATM withdrawal

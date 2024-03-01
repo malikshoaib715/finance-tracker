@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_22_171410) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_01_153813) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -57,6 +57,23 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_22_171410) do
     t.check_constraint "amount_cents > 0", name: "transactions_amount_positive"
   end
 
+  create_table "transfers", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "from_account_id", null: false
+    t.bigint "to_account_id", null: false
+    t.bigint "amount_cents", null: false
+    t.date "occurred_on", null: false
+    t.string "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["from_account_id"], name: "index_transfers_on_from_account_id"
+    t.index ["to_account_id"], name: "index_transfers_on_to_account_id"
+    t.index ["user_id", "occurred_on"], name: "index_transfers_on_user_id_and_occurred_on"
+    t.index ["user_id"], name: "index_transfers_on_user_id"
+    t.check_constraint "amount_cents > 0", name: "transfers_amount_positive"
+    t.check_constraint "from_account_id <> to_account_id", name: "transfers_distinct_accounts"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -82,4 +99,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_22_171410) do
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "categories"
   add_foreign_key "transactions", "users"
+  add_foreign_key "transfers", "accounts", column: "from_account_id"
+  add_foreign_key "transfers", "accounts", column: "to_account_id"
+  add_foreign_key "transfers", "users"
 end
