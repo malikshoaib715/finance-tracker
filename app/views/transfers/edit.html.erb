@@ -1,0 +1,14 @@
+<% content_for :title, "Edit transfer" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit transfer</h1>
+  <div class="card mt-6">
+    <%= render "form", transfer: @transfer, accounts: @accounts %>
+  </div>
+
+  <div class="mt-6 flex justify-end">
+    <%= button_to "Delete transfer", transfer_path(@transfer), method: :delete,
+          form: { data: { turbo_confirm: "Delete this transfer?" } },
+          class: "text-sm font-medium text-rose-600 hover:text-rose-500" %>
+  </div>
+</div>

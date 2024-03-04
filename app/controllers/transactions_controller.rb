@@ -3,7 +3,9 @@ class TransactionsController < ApplicationController
   before_action :load_form_options, only: %i[ new create edit update ]
 
   def index
-    @transactions = current_user.transactions.includes(:account, :category).recent_first.limit(100)
+    transactions = current_user.transactions.includes(:account, :category).recent_first.limit(100)
+    transfers = current_user.transfers.includes(:from_account, :to_account).recent_first.limit(100)
+    @entries = (transactions + transfers).sort_by { |entry| [ entry.occurred_on, entry.created_at ] }.reverse
   end
 
   def new

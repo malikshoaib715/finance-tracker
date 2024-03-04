@@ -1,0 +1,16 @@
+<% content_for :title, "New transfer" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Move money between accounts</h1>
+
+  <% if @accounts.size < 2 %>
+    <div class="card mt-6 text-center">
+      <p class="text-slate-600">You need at least two accounts to make a transfer.</p>
+      <%= link_to "Add an account", new_account_path, class: "btn-primary mt-4" %>
+    </div>
+  <% else %>
+    <div class="card mt-6">
+      <%= render "form", transfer: @transfer, accounts: @accounts %>
+    </div>
+  <% end %>
+</div>
