@@ -8,6 +8,8 @@
   </div>
 </div>
 
+<%= render "filter", filter: @filter, accounts: @accounts, categories: @categories %>
+
 <% if @entries.any? %>
   <div class="mt-6 space-y-6">
     <% @entries.group_by(&:occurred_on).each do |date, entries| %>
@@ -20,6 +22,11 @@
         </ul>
       </section>
     <% end %>
+  </div>
+<% elsif @filter.active? %>
+  <div class="card mt-6 py-12 text-center">
+    <p class="text-slate-600">Nothing matches these filters.</p>
+    <%= link_to "Clear filters", transactions_path, class: "link mt-2 inline-block" %>
   </div>
 <% else %>
   <div class="card mt-6 py-12 text-center">

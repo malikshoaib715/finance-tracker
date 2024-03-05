@@ -3,8 +3,12 @@ class TransactionsController < ApplicationController
   before_action :load_form_options, only: %i[ new create edit update ]
 
   def index
-    transactions = current_user.transactions.includes(:account, :category).recent_first.limit(100)
-    transfers = current_user.transfers.includes(:from_account, :to_account).recent_first.limit(100)
+    @filter = TransactionFilter.new(current_user, filter_params)
+    @accounts = current_user.accounts.alphabetical
+    @categories = current_user.categories.alphabetical
+
+    transactions = @filter.transactions.recent_first.limit(100)
+    transfers = @filter.transfers.recent_first.limit(100)
     @entries = (transactions + transfers).sort_by { |entry| [ entry.occurred_on, entry.created_at ] }.reverse
   end
 
@@ -51,6 +55,10 @@ class TransactionsController < ApplicationController
   def load_form_options
     @accounts = current_user.accounts.active.alphabetical
     @categories = current_user.categories.alphabetical
+  end
+
+  def filter_params
+    params.fetch(:filter, {}).permit(:q, :account_id, :category_id, :kind, :from, :to)
   end
 
   def transaction_params

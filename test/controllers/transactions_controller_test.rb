@@ -39,4 +39,11 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
       delete transaction_url(transactions(:groceries))
     end
   end
+
+  test "filters the list" do
+    get transactions_url, params: { filter: { q: "rent" } }
+    assert_select "##{ActionView::RecordIdentifier.dom_id(transactions(:rent))}"
+    assert_select "##{ActionView::RecordIdentifier.dom_id(transactions(:groceries))}", count: 0
+    assert_select "a", "Clear"
+  end
 end

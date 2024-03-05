@@ -1,0 +1,30 @@
+<%= form_with model: filter, scope: :filter, url: transactions_path, method: :get,
+      class: "card mt-6 grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-6", data: { turbo_action: "advance" } do |f| %>
+  <div class="lg:col-span-2">
+    <%= f.label :q, "Search", class: "sr-only" %>
+    <%= f.search_field :q, placeholder: "Search descriptions", class: "form-input mt-0" %>
+  </div>
+
+  <%= f.label :account_id, "Account", class: "sr-only" %>
+  <%= f.collection_select :account_id, accounts, :id, :name, { include_blank: "All accounts" }, class: "form-input mt-0" %>
+
+  <%= f.label :category_id, "Category", class: "sr-only" %>
+  <%= f.collection_select :category_id, categories, :id, :name, { include_blank: "All categories" }, class: "form-input mt-0" %>
+
+  <%= f.label :kind, "Type", class: "sr-only" %>
+  <%= f.select :kind, Transaction.kinds.keys.map { |k| [ k.pluralize.humanize, k ] }, { include_blank: "Income & expenses" }, class: "form-input mt-0" %>
+
+  <div class="flex gap-2">
+    <%= f.submit "Filter", name: nil, class: "btn-primary flex-1" %>
+    <% if filter.active? %>
+      <%= link_to "Clear", transactions_path, class: "btn-secondary" %>
+    <% end %>
+  </div>
+
+  <div class="flex items-center gap-2 text-sm text-slate-600 lg:col-span-3">
+    <%= f.label :from, "From" %>
+    <%= f.date_field :from, class: "form-input mt-0" %>
+    <%= f.label :to, "to" %>
+    <%= f.date_field :to, class: "form-input mt-0" %>
+  </div>
+<% end %>
