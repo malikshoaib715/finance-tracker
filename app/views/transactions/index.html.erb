@@ -9,6 +9,7 @@
 </div>
 
 <%= render "filter", filter: @filter, accounts: @accounts, categories: @categories %>
+<%= render "month_nav", filter: @filter if @filter.by_month? %>
 
 <% if @entries.any? %>
   <div class="mt-6 space-y-6">
@@ -30,7 +31,7 @@
   </div>
 <% else %>
   <div class="card mt-6 py-12 text-center">
-    <p class="text-slate-600">No transactions yet.</p>
+    <p class="text-slate-600">Nothing recorded in <%= l(@filter.period.first, format: "%B %Y") %>.</p>
     <%= link_to "Record your first one", new_transaction_path, class: "btn-primary mt-4" %>
   </div>
 <% end %>

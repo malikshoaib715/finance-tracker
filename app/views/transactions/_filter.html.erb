@@ -1,5 +1,7 @@
 <%= form_with model: filter, scope: :filter, url: transactions_path, method: :get,
       class: "card mt-6 grid gap-3 p-4 sm:grid-cols-2 lg:grid-cols-6", data: { turbo_action: "advance" } do |f| %>
+  <%= f.hidden_field :month %>
+
   <div class="lg:col-span-2">
     <%= f.label :q, "Search", class: "sr-only" %>
     <%= f.search_field :q, placeholder: "Search descriptions", class: "form-input mt-0" %>

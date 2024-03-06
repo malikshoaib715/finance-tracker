@@ -10,6 +10,7 @@ class TransactionFilter
   attribute :kind, :string
   attribute :from, :date
   attribute :to, :date
+  attribute :month, :string
 
   def initialize(user, params = {})
     @user = user
@@ -17,7 +18,19 @@ class TransactionFilter
   end
 
   def active?
-    attributes.values.any?(&:present?)
+    attributes.except("month").values.any?(&:present?)
+  end
+
+  # Without explicit dates the list shows one month at a time ("2024-03").
+  def period
+    return (from || Date.new(2000))..(to || Date.current) if from || to
+
+    start = Date.strptime(month.to_s, "%Y-%m") rescue Date.current.beginning_of_month
+    start.all_month
+  end
+
+  def by_month?
+    from.nil? && to.nil?
   end
 
   def transactions
@@ -42,8 +55,6 @@ class TransactionFilter
   private
 
   def within_dates(scope)
-    scope = scope.where(occurred_on: from..) if from
-    scope = scope.where(occurred_on: ..to) if to
-    scope
+    scope.where(occurred_on: period)
   end
 end

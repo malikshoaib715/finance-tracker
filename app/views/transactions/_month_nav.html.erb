@@ -1,0 +1,14 @@
+<% month = filter.period.first %>
+<% nav_params = ->(date) { { filter: filter.attributes.compact.merge("month" => date.strftime("%Y-%m")) } } %>
+
+<nav class="mt-6 flex items-center justify-between" aria-label="Month">
+  <%= link_to "← #{l(month.prev_month, format: '%b %Y')}", transactions_path(nav_params.(month.prev_month)),
+        class: "btn-secondary" %>
+  <h2 class="text-lg font-semibold text-slate-900"><%= l(month, format: "%B %Y") %></h2>
+  <% if month.next_month <= Date.current %>
+    <%= link_to "#{l(month.next_month, format: '%b %Y')} →", transactions_path(nav_params.(month.next_month)),
+          class: "btn-secondary" %>
+  <% else %>
+    <span class="w-28"></span>
+  <% end %>
+</nav>

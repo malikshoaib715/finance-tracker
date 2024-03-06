@@ -34,4 +34,20 @@ class TransactionFilterTest < ActiveSupport::TestCase
     f = filter(from: start + 1, to: start + 3)
     assert_equal [ transactions(:rent), transactions(:groceries) ].sort_by(&:id), f.transactions.sort_by(&:id)
   end
+
+  test "defaults to the current month" do
+    assert_equal Date.current.all_month, filter.period
+  end
+
+  test "can show another month" do
+    old = users(:ayesha).transactions.create!(account: accounts(:ayesha_cash), kind: "expense",
+      amount: "100", occurred_on: Date.new(2023, 12, 15), description: "Old purchase")
+
+    assert_equal [ old ], filter(month: "2023-12").transactions.to_a
+    assert_not_includes filter.transactions, old
+  end
+
+  test "an invalid month falls back to the current one" do
+    assert_equal Date.current.all_month, filter(month: "nonsense").period
+  end
 end

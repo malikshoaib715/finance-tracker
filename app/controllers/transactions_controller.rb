@@ -7,8 +7,8 @@ class TransactionsController < ApplicationController
     @accounts = current_user.accounts.alphabetical
     @categories = current_user.categories.alphabetical
 
-    transactions = @filter.transactions.recent_first.limit(100)
-    transfers = @filter.transfers.recent_first.limit(100)
+    transactions = @filter.transactions.recent_first
+    transfers = @filter.transfers.recent_first
     @entries = (transactions + transfers).sort_by { |entry| [ entry.occurred_on, entry.created_at ] }.reverse
   end
 
@@ -58,7 +58,7 @@ class TransactionsController < ApplicationController
   end
 
   def filter_params
-    params.fetch(:filter, {}).permit(:q, :account_id, :category_id, :kind, :from, :to)
+    params.fetch(:filter, {}).permit(:q, :account_id, :category_id, :kind, :from, :to, :month)
   end
 
   def transaction_params
