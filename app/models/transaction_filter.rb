@@ -52,6 +52,12 @@ class TransactionFilter
     within_dates(scope)
   end
 
+  def totals
+    sums = transactions.reorder(nil).group(:kind).sum(:amount_cents)
+    income, expense = sums.fetch("income", 0), sums.fetch("expense", 0)
+    { income: income, expense: expense, net: income - expense }
+  end
+
   private
 
   def within_dates(scope)

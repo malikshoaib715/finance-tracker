@@ -10,6 +10,7 @@
 
 <%= render "filter", filter: @filter, accounts: @accounts, categories: @categories %>
 <%= render "month_nav", filter: @filter if @filter.by_month? %>
+<%= render "totals", totals: @totals %>
 
 <% if @entries.any? %>
   <div class="mt-6 space-y-6">

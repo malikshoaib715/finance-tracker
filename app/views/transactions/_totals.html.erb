@@ -1,0 +1,14 @@
+<dl class="mt-4 grid grid-cols-3 divide-x divide-slate-200 card p-0 text-center">
+  <div class="px-4 py-3">
+    <dt class="text-xs uppercase tracking-wide text-slate-500">Income</dt>
+    <dd class="mt-1 font-semibold"><%= money_tag(totals[:income]) %></dd>
+  </div>
+  <div class="px-4 py-3">
+    <dt class="text-xs uppercase tracking-wide text-slate-500">Expenses</dt>
+    <dd class="mt-1 font-semibold"><%= money_tag(-totals[:expense]) %></dd>
+  </div>
+  <div class="px-4 py-3">
+    <dt class="text-xs uppercase tracking-wide text-slate-500">Net</dt>
+    <dd class="mt-1 font-semibold"><%= money_tag(totals[:net]) %></dd>
+  </div>
+</dl>

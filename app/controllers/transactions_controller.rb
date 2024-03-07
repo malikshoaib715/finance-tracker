@@ -9,6 +9,7 @@ class TransactionsController < ApplicationController
 
     transactions = @filter.transactions.recent_first
     transfers = @filter.transfers.recent_first
+    @totals = @filter.totals
     @entries = (transactions + transfers).sort_by { |entry| [ entry.occurred_on, entry.created_at ] }.reverse
   end
 

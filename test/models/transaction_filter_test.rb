@@ -50,4 +50,9 @@ class TransactionFilterTest < ActiveSupport::TestCase
   test "an invalid month falls back to the current one" do
     assert_equal Date.current.all_month, filter(month: "nonsense").period
   end
+
+  test "totals income, expenses and net for the filtered set" do
+    assert_equal({ income: 25_000_000, expense: 6_935_000, net: 18_065_000 }, filter.totals)
+    assert_equal({ income: 0, expense: 435_000, net: -435_000 }, filter(account_id: accounts(:ayesha_cash).id).totals)
+  end
 end
