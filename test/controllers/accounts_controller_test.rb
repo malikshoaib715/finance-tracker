@@ -33,4 +33,11 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     get edit_account_url(accounts(:bilal_bank))
     assert_response :not_found
   end
+
+  test "shows an account with its ledger" do
+    get account_url(accounts(:ayesha_cash))
+    assert_response :success
+    assert_select "h1", "Wallet cash"
+    assert_select "##{ActionView::RecordIdentifier.dom_id(transfers(:atm_withdrawal), :ledger)}", text: /From Meezan Current/
+  end
 end

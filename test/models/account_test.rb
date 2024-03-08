@@ -31,4 +31,12 @@ class AccountTest < ActiveSupport::TestCase
       users(:ayesha).destroy
     end
   end
+
+  test "ledger lists movements oldest first with a running balance" do
+    ledger = accounts(:ayesha_bank).ledger
+
+    assert_equal [ "February salary", "Flat rent", "To Wallet cash" ], ledger.map(&:title)
+    assert_equal [ 25_000_000, -6_500_000, -2_000_000 ], ledger.map(&:amount_cents)
+    assert_equal accounts(:ayesha_bank).balance_cents, ledger.last.balance_cents
+  end
 end

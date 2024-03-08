@@ -1,9 +1,13 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[ edit update ]
+  before_action :set_account, only: %i[ show edit update ]
 
   def index
     @accounts = current_user.accounts.active.alphabetical
     @archived_accounts = current_user.accounts.archived.alphabetical
+  end
+
+  def show
+    @ledger = @account.ledger.reverse
   end
 
   def new
