@@ -39,4 +39,16 @@ class AccountTest < ActiveSupport::TestCase
     assert_equal [ 25_000_000, -6_500_000, -2_000_000 ], ledger.map(&:amount_cents)
     assert_equal accounts(:ayesha_bank).balance_cents, ledger.last.balance_cents
   end
+
+  test "with_balances matches the per-account calculation" do
+    users(:ayesha).accounts.with_balances.each do |account|
+      assert_equal account.reload.balance_cents, users(:ayesha).accounts.with_balances.find(account.id).balance_cents
+    end
+  end
+
+  test "with_balances loads all balances in a single query" do
+    user = users(:ayesha)
+    queries = count_queries { user.accounts.with_balances.map(&:balance_cents) }
+    assert_equal 1, queries
+  end
 end

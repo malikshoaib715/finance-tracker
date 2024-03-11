@@ -17,6 +17,20 @@ class Account < ApplicationRecord
   scope :archived, -> { where.not(archived_at: nil) }
   scope :alphabetical, -> { order(:name) }
 
+  # Loads each account's balance in the same query (one correlated subquery per
+  # movement type) so lists don't run four SUMs per account.
+  scope :with_balances, -> {
+    select(<<~SQL.squish)
+      accounts.*,
+      accounts.opening_balance_cents
+        + COALESCE((SELECT SUM(CASE WHEN t.kind = 'income' THEN t.amount_cents ELSE -t.amount_cents END)
+                    FROM transactions t WHERE t.account_id = accounts.id), 0)
+        + COALESCE((SELECT SUM(tr.amount_cents) FROM transfers tr WHERE tr.to_account_id = accounts.id), 0)
+        - COALESCE((SELECT SUM(tr.amount_cents) FROM transfers tr WHERE tr.from_account_id = accounts.id), 0)
+        AS computed_balance_cents
+    SQL
+  }
+
   def archived?
     archived_at.present?
   end
@@ -30,6 +44,8 @@ class Account < ApplicationRecord
   end
 
   def balance_cents
+    return self[:computed_balance_cents] if has_attribute?(:computed_balance_cents)
+
     opening_balance_cents +
       transactions.income.sum(:amount_cents) - transactions.expense.sum(:amount_cents) +
       incoming_transfers.sum(:amount_cents) - outgoing_transfers.sum(:amount_cents)
