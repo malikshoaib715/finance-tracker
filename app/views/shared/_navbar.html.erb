@@ -1,4 +1,7 @@
-<header class="bg-white border-b border-slate-200">
+<% nav_links = [ [ "Dashboard", dashboard_path ], [ "Transactions", transactions_path ],
+                 [ "Accounts", accounts_path ], [ "Categories", categories_path ] ] %>
+
+<header class="bg-white border-b border-slate-200" data-controller="toggle">
   <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
     <%= link_to root_path, class: "flex items-center gap-2 font-semibold text-slate-900" do %>
       <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-600 text-white text-sm font-bold">FT</span>
@@ -7,10 +10,14 @@
 
     <% if user_signed_in? %>
       <div class="flex items-center gap-6">
-        <%= link_to "Dashboard", dashboard_path, class: "text-sm font-medium text-slate-700 hover:text-slate-900" %>
-        <%= link_to "Transactions", transactions_path, class: "text-sm font-medium text-slate-700 hover:text-slate-900" %>
-        <%= link_to "Accounts", accounts_path, class: "text-sm font-medium text-slate-700 hover:text-slate-900" %>
-        <%= link_to "Categories", categories_path, class: "text-sm font-medium text-slate-700 hover:text-slate-900" %>
+        <div class="hidden md:flex items-center gap-6">
+          <% nav_links.each do |label, path| %>
+            <%= link_to label, path, class: [ "text-sm font-medium hover:text-slate-900",
+                                              current_page?(path) ? "text-slate-900" : "text-slate-600" ],
+                                     aria: { current: ("page" if current_page?(path)) } %>
+          <% end %>
+        </div>
+
         <div class="relative" data-controller="dropdown"
              data-action="click@window->dropdown#closeOnClickOutside keydown.esc@window->dropdown#close">
           <button type="button" data-dropdown-target="button" data-action="dropdown#toggle"
@@ -30,6 +37,13 @@
                   class: "block w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-50" %>
           </div>
         </div>
+
+        <button type="button" class="md:hidden -mr-2 rounded-md p-2 text-slate-600 hover:bg-slate-100"
+                data-action="toggle#toggle" aria-label="Menu" aria-expanded="false" data-toggle-target="button">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
       </div>
     <% else %>
       <div class="flex items-center gap-3">
@@ -38,4 +52,12 @@
       </div>
     <% end %>
   </nav>
+
+  <% if user_signed_in? %>
+    <div class="hidden border-t border-slate-200 md:hidden" data-toggle-target="panel">
+      <% nav_links.each do |label, path| %>
+        <%= link_to label, path, class: "block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50" %>
+      <% end %>
+    </div>
+  <% end %>
 </header>
