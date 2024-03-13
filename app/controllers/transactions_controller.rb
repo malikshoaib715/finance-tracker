@@ -13,6 +13,12 @@ class TransactionsController < ApplicationController
     @entries = (transactions + transfers).sort_by { |entry| [ entry.occurred_on, entry.created_at ] }.reverse
   end
 
+  def export
+    filter = TransactionFilter.new(current_user, filter_params)
+    csv = Transaction::CsvExport.new(filter.transactions).to_csv
+    send_data csv, filename: "transactions-#{filter.period.first.strftime('%Y-%m')}.csv", type: :csv
+  end
+
   def new
     @transaction = current_user.transactions.build(
       occurred_on: Date.current,

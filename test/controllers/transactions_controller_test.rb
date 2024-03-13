@@ -46,4 +46,12 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_select "##{ActionView::RecordIdentifier.dom_id(transactions(:groceries))}", count: 0
     assert_select "a", "Clear"
   end
+
+  test "exports the filtered transactions as CSV" do
+    get export_transactions_url(filter: { kind: "income" })
+    assert_response :success
+    assert_equal "text/csv", response.media_type
+    assert_match "February salary", response.body
+    assert_no_match "Flat rent", response.body
+  end
 end

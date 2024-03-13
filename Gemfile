@@ -26,6 +26,9 @@ gem "stimulus-rails"
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
 gem "tailwindcss-rails"
 
+# CSV leaves the default gems in Ruby 3.4; declare it explicitly
+gem "csv"
+
 # Authentication [https://github.com/heartcombo/devise]
 gem "devise", "~> 4.9"
 

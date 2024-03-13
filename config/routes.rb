@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resource :dashboard, only: :show, controller: "dashboard"
-  resources :transactions, except: :show
+  resources :transactions, except: :show do
+    get :export, on: :collection, defaults: { format: :csv }
+  end
   resources :transfers, except: %i[ index show ]
   resources :categories, except: :show
   resources :accounts, only: %i[ index show new create edit update ] do
