@@ -40,4 +40,19 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
     assert_select "h1", "Wallet cash"
     assert_select "##{ActionView::RecordIdentifier.dom_id(transfers(:atm_withdrawal), :ledger)}", text: /From Meezan Current/
   end
+
+  test "deletes an account with no history" do
+    account = users(:ayesha).accounts.create!(name: "Unused", currency: "PKR")
+    assert_difference "Account.count", -1 do
+      delete account_url(account)
+    end
+    assert_redirected_to accounts_url
+  end
+
+  test "refuses to delete an account with history" do
+    assert_no_difference "Account.count" do
+      delete account_url(accounts(:ayesha_bank))
+    end
+    assert_redirected_to edit_account_url(accounts(:ayesha_bank))
+  end
 end

@@ -31,6 +31,10 @@ class Account < ApplicationRecord
     SQL
   }
 
+  def deletable?
+    !transactions.exists? && !incoming_transfers.exists? && !outgoing_transfers.exists?
+  end
+
   def archived?
     archived_at.present?
   end

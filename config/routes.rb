@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   end
   resources :transfers, except: %i[ index show ]
   resources :categories, except: :show
-  resources :accounts, only: %i[ index show new create edit update ] do
+  resources :accounts do
     resource :archive, only: %i[ create destroy ], module: :accounts
   end
 

@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :set_account, only: %i[ show edit update ]
+  before_action :set_account, only: %i[ show edit update destroy ]
 
   def index
     @accounts = current_user.accounts.active.alphabetical.with_balances
@@ -32,6 +32,14 @@ class AccountsController < ApplicationController
       redirect_to accounts_path, notice: "#{@account.name} was updated."
     else
       render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    if @account.destroy
+      redirect_to accounts_path, notice: "#{@account.name} was deleted.", status: :see_other
+    else
+      redirect_to edit_account_path(@account), alert: "#{@account.name} has history and can only be archived."
     end
   end
 
