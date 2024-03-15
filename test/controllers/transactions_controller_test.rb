@@ -54,4 +54,16 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     assert_match "February salary", response.body
     assert_no_match "Flat rent", response.body
   end
+
+  test "repeating a transaction pre-fills the form with today's date" do
+    get new_transaction_url(repeat: transactions(:rent))
+    assert_select "input#transaction_description[value=?]", "Flat rent"
+    assert_select "input#transaction_amount[value=?]", "65000.0"
+    assert_select "input#transaction_occurred_on[value=?]", Date.current.iso8601
+  end
+
+  test "can't repeat someone else's transaction" do
+    get new_transaction_url(repeat: transactions(:bilal_groceries))
+    assert_select "input#transaction_description:not([value])"
+  end
 end

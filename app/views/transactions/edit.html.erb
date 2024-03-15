@@ -6,7 +6,8 @@
     <%= render "form", transaction: @transaction, accounts: @accounts, categories: @categories %>
   </div>
 
-  <div class="mt-6 flex justify-end">
+  <div class="mt-6 flex items-center justify-between">
+    <%= link_to "Repeat today", new_transaction_path(repeat: @transaction), class: "link text-sm" %>
     <%= button_to "Delete transaction", transaction_path(@transaction), method: :delete,
           form: { data: { turbo_confirm: "Delete this transaction?" } },
           class: "text-sm font-medium text-rose-600 hover:text-rose-500" %>

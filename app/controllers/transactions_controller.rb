@@ -20,11 +20,16 @@ class TransactionsController < ApplicationController
   end
 
   def new
-    @transaction = current_user.transactions.build(
-      occurred_on: Date.current,
-      kind: params[:kind].presence_in(Transaction.kinds.keys) || "expense",
-      account: @accounts.first
-    )
+    @transaction =
+      if (source = current_user.transactions.find_by(id: params[:repeat]))
+        source.dup.tap { |copy| copy.occurred_on = Date.current }
+      else
+        current_user.transactions.build(
+          occurred_on: Date.current,
+          kind: params[:kind].presence_in(Transaction.kinds.keys) || "expense",
+          account: @accounts.first
+        )
+      end
   end
 
   def create
