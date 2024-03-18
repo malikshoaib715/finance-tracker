@@ -11,6 +11,7 @@ class User < ApplicationRecord
   has_many :transfers, dependent: :delete_all
   has_many :accounts, dependent: :destroy
   has_many :categories, dependent: :destroy
+  has_many :tags, dependent: :destroy
 
   after_create_commit -> { Category.create_defaults_for(self) }
 

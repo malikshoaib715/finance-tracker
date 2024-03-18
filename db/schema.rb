@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_01_153813) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_18_134735) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -36,6 +36,24 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_01_153813) do
     t.datetime "updated_at", null: false
     t.index ["user_id", "kind", "name"], name: "index_categories_on_user_id_and_kind_and_name", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "taggings", force: :cascade do |t|
+    t.bigint "transaction_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["transaction_id", "tag_id"], name: "index_taggings_on_transaction_id_and_tag_id", unique: true
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "user_id, lower((name)::text)", name: "index_tags_on_user_id_and_lower_name", unique: true
+    t.index ["user_id"], name: "index_tags_on_user_id"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -96,6 +114,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_01_153813) do
 
   add_foreign_key "accounts", "users"
   add_foreign_key "categories", "users"
+  add_foreign_key "taggings", "tags", on_delete: :cascade
+  add_foreign_key "taggings", "transactions", on_delete: :cascade
+  add_foreign_key "tags", "users"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "categories"
   add_foreign_key "transactions", "users"

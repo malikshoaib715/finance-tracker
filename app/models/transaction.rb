@@ -2,6 +2,8 @@ class Transaction < ApplicationRecord
   belongs_to :user
   belongs_to :account
   belongs_to :category, optional: true
+  has_many :taggings, foreign_key: :transaction_id, inverse_of: :owner_transaction, dependent: :delete_all
+  has_many :tags, through: :taggings
 
   enum :kind, { expense: "expense", income: "income" }, default: :expense, validate: true
 
@@ -28,6 +30,16 @@ class Transaction < ApplicationRecord
     self.amount_cents = (BigDecimal(value.to_s.delete(",")) * 100).round.abs
   rescue ArgumentError, TypeError
     self.amount_cents = nil
+  end
+
+  def tag_list
+    tags.map(&:name).join(", ")
+  end
+
+  # "groceries, Family , #ramadan" -> the user's tags, created as needed.
+  def tag_list=(value)
+    names = value.to_s.split(",").map { |name| name.squish.downcase.delete_prefix("#") }.compact_blank.uniq
+    self.tags = names.map { |name| user.tags.find_or_initialize_by(name: name) }
   end
 
   private
