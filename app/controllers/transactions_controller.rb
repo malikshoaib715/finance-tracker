@@ -7,7 +7,7 @@ class TransactionsController < ApplicationController
     @accounts = current_user.accounts.alphabetical
     @categories = current_user.categories.alphabetical
 
-    transactions = @filter.transactions.recent_first
+    transactions = @filter.transactions.includes(:tags).recent_first
     transfers = @filter.transfers.recent_first
     @totals = @filter.totals
     @entries = (transactions + transfers).sort_by { |entry| [ entry.occurred_on, entry.created_at ] }.reverse
@@ -74,6 +74,6 @@ class TransactionsController < ApplicationController
   end
 
   def transaction_params
-    params.require(:transaction).permit(:kind, :amount, :occurred_on, :description, :account_id, :category_id, :notes)
+    params.require(:transaction).permit(:kind, :amount, :occurred_on, :description, :account_id, :category_id, :notes, :tag_list)
   end
 end

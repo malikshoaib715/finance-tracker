@@ -51,6 +51,17 @@
   </div>
 
   <div>
+    <%= f.label :tag_list, "Tags", class: "form-label" %>
+    <%= f.text_field :tag_list, placeholder: "e.g. family, ramadan", list: "user-tags", autocomplete: "off", class: "form-input" %>
+    <datalist id="user-tags">
+      <% current_user.tags.alphabetical.each do |tag| %>
+        <option value="<%= tag.name %>"></option>
+      <% end %>
+    </datalist>
+    <p class="mt-1 text-xs text-slate-500">Separate tags with commas.</p>
+  </div>
+
+  <div>
     <%= f.label :notes, class: "form-label" %>
     <%= f.text_area :notes, rows: 2, class: "form-input" %>
   </div>

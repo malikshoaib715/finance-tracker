@@ -6,6 +6,6 @@ class DashboardController < ApplicationController
     @income_cents = month_transactions.income.sum(:amount_cents)
     @expense_cents = month_transactions.expense.sum(:amount_cents)
     @accounts = current_user.accounts.active.alphabetical.with_balances
-    @recent_transactions = current_user.transactions.includes(:account, :category).recent_first.limit(5)
+    @recent_transactions = current_user.transactions.includes(:account, :category, :tags).recent_first.limit(5)
   end
 end

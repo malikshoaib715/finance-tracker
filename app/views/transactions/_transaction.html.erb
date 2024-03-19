@@ -7,6 +7,9 @@
         <% if transaction.category %>
           · <%= category_badge(transaction.category) %>
         <% end %>
+        <% transaction.tags.each do |tag| %>
+          <span class="text-slate-400">#<%= tag.name %></span>
+        <% end %>
       </p>
     </div>
     <%= money_tag(transaction.signed_amount_cents, transaction.account.currency, class: "text-sm font-semibold") %>

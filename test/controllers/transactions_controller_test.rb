@@ -66,4 +66,12 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     get new_transaction_url(repeat: transactions(:bilal_groceries))
     assert_select "input#transaction_description:not([value])"
   end
+
+  test "saves tags from the form and shows them in the list" do
+    patch transaction_url(transactions(:rent)), params: { transaction: { tag_list: "housing, family" } }
+    assert_equal %w[family housing], transactions(:rent).reload.tags.map(&:name).sort
+
+    get transactions_url
+    assert_select "##{ActionView::RecordIdentifier.dom_id(transactions(:rent))}", text: /#housing/
+  end
 end
