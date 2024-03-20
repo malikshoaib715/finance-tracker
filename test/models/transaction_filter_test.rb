@@ -55,4 +55,10 @@ class TransactionFilterTest < ActiveSupport::TestCase
     assert_equal({ income: 25_000_000, expense: 6_935_000, net: 18_065_000 }, filter.totals)
     assert_equal({ income: 0, expense: 435_000, net: -435_000 }, filter(account_id: accounts(:ayesha_cash).id).totals)
   end
+
+  test "filters by tag and hides transfers" do
+    f = filter(tag_id: tags(:ayesha_family).id)
+    assert_equal [ transactions(:groceries) ], f.transactions.to_a
+    assert_empty f.transfers
+  end
 end

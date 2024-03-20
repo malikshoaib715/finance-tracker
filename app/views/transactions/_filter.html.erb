@@ -13,6 +13,11 @@
   <%= f.label :category_id, "Category", class: "sr-only" %>
   <%= f.collection_select :category_id, categories, :id, :name, { include_blank: "All categories" }, class: "form-input mt-0" %>
 
+  <% if tags.any? %>
+    <%= f.label :tag_id, "Tag", class: "sr-only" %>
+    <%= f.collection_select :tag_id, tags, :id, ->(tag) { "##{tag.name}" }, { include_blank: "All tags" }, class: "form-input mt-0" %>
+  <% end %>
+
   <%= f.label :kind, "Type", class: "sr-only" %>
   <%= f.select :kind, Transaction.kinds.keys.map { |k| [ k.pluralize.humanize, k ] }, { include_blank: "Income & expenses" }, class: "form-input mt-0" %>
 

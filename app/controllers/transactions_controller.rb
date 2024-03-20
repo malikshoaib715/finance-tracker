@@ -6,6 +6,7 @@ class TransactionsController < ApplicationController
     @filter = TransactionFilter.new(current_user, filter_params)
     @accounts = current_user.accounts.alphabetical
     @categories = current_user.categories.alphabetical
+    @tags = current_user.tags.alphabetical
 
     transactions = @filter.transactions.includes(:tags).recent_first
     transfers = @filter.transfers.recent_first
@@ -70,7 +71,7 @@ class TransactionsController < ApplicationController
   end
 
   def filter_params
-    params.fetch(:filter, {}).permit(:q, :account_id, :category_id, :kind, :from, :to, :month)
+    params.fetch(:filter, {}).permit(:q, :account_id, :category_id, :tag_id, :kind, :from, :to, :month)
   end
 
   def transaction_params

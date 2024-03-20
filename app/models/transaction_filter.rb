@@ -7,6 +7,7 @@ class TransactionFilter
   attribute :q, :string
   attribute :account_id, :integer
   attribute :category_id, :integer
+  attribute :tag_id, :integer
   attribute :kind, :string
   attribute :from, :date
   attribute :to, :date
@@ -37,6 +38,7 @@ class TransactionFilter
     scope = @user.transactions.includes(:account, :category)
     scope = scope.where(account_id: account_id) if account_id
     scope = scope.where(category_id: category_id) if category_id
+    scope = scope.where(id: Tagging.where(tag_id: tag_id).select(:transaction_id)) if tag_id
     scope = scope.where(kind: kind) if kind.in?(Transaction.kinds.keys)
     scope = scope.where("description ILIKE ?", "%#{Transaction.sanitize_sql_like(q.strip)}%") if q.present?
     within_dates(scope)
@@ -45,7 +47,7 @@ class TransactionFilter
   # Transfers have no category, kind or description to match, so only show
   # them when the filter is about accounts or dates.
   def transfers
-    return Transfer.none if q.present? || category_id || kind.present?
+    return Transfer.none if q.present? || category_id || tag_id || kind.present?
 
     scope = @user.transfers.includes(:from_account, :to_account)
     scope = scope.where(from_account_id: account_id).or(scope.where(to_account_id: account_id)) if account_id
