@@ -45,4 +45,17 @@ class TransactionTest < ActiveSupport::TestCase
   test "accounts with transactions can't be deleted" do
     assert_not accounts(:ayesha_bank).destroy
   end
+
+  test "accepts PDF and image receipts" do
+    transaction = transactions(:rent)
+    transaction.receipts.attach(io: file_fixture("receipt.pdf").open, filename: "receipt.pdf", content_type: "application/pdf")
+    assert transaction.valid?
+  end
+
+  test "rejects other file types as receipts" do
+    transaction = transactions(:rent)
+    transaction.receipts.attach(io: file_fixture("notes.txt").open, filename: "notes.txt", content_type: "text/plain")
+    assert_not transaction.valid?
+    assert_match "must be images or PDFs", transaction.errors[:receipts].first
+  end
 end

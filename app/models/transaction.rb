@@ -4,6 +4,10 @@ class Transaction < ApplicationRecord
   belongs_to :category, optional: true
   has_many :taggings, foreign_key: :transaction_id, inverse_of: :owner_transaction, dependent: :delete_all
   has_many :tags, through: :taggings
+  has_many_attached :receipts
+
+  RECEIPT_TYPES = %w[image/jpeg image/png image/webp image/heic application/pdf].freeze
+  RECEIPT_MAX_SIZE = 5.megabytes
 
   enum :kind, { expense: "expense", income: "income" }, default: :expense, validate: true
 
@@ -14,6 +18,7 @@ class Transaction < ApplicationRecord
   validates :amount_cents, numericality: { only_integer: true, greater_than: 0 }
   validate :account_and_category_belong_to_user
   validate :category_matches_kind
+  validate :receipts_are_images_or_pdfs
 
   scope :recent_first, -> { order(occurred_on: :desc, id: :desc) }
 
@@ -53,5 +58,16 @@ class Transaction < ApplicationRecord
     return if category.nil? || category.kind == kind
 
     errors.add(:category, "is for #{category.kind.pluralize}, not #{kind.pluralize}")
+  end
+
+  def receipts_are_images_or_pdfs
+    receipts.each do |receipt|
+      unless receipt.content_type.in?(RECEIPT_TYPES)
+        errors.add(:receipts, "must be images or PDFs (#{receipt.filename} isn't)")
+      end
+      if receipt.byte_size > RECEIPT_MAX_SIZE
+        errors.add(:receipts, "must be smaller than 5 MB (#{receipt.filename} is too big)")
+      end
+    end
   end
 end
