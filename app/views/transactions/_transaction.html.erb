@@ -1,7 +1,12 @@
 <li id="<%= dom_id(transaction) %>">
   <%= link_to edit_transaction_path(transaction), class: "flex items-center gap-4 px-4 py-3 hover:bg-slate-50" do %>
     <div class="min-w-0 flex-1">
-      <p class="truncate text-sm font-medium text-slate-900"><%= transaction.description %></p>
+      <p class="truncate text-sm font-medium text-slate-900">
+        <%= transaction.description %>
+        <% if transaction.receipts.attached? %>
+          <span class="ml-1 text-xs text-slate-400" title="Has receipts">📎</span>
+        <% end %>
+      </p>
       <p class="mt-0.5 flex items-center gap-2 text-xs text-slate-500">
         <%= transaction.account.name %>
         <% if transaction.category %>

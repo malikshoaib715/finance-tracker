@@ -6,6 +6,30 @@
     <%= render "form", transaction: @transaction, accounts: @accounts, categories: @categories %>
   </div>
 
+  <% if @transaction.receipts.attached? %>
+    <div class="card mt-6">
+      <h2 class="font-semibold text-slate-900">Receipts</h2>
+      <ul class="mt-4 grid gap-4 sm:grid-cols-3">
+        <% @transaction.receipts.each do |receipt| %>
+          <li id="<%= dom_id(receipt) %>" class="rounded-lg ring-1 ring-slate-200 p-2 text-sm">
+            <%= link_to rails_blob_path(receipt, disposition: "inline"), target: "_blank", class: "block" do %>
+              <% if receipt.image? %>
+                <%= image_tag rails_blob_path(receipt), alt: receipt.filename.to_s, class: "h-32 w-full rounded object-cover" %>
+              <% else %>
+                <span class="flex h-32 items-center justify-center rounded bg-slate-50 font-semibold text-slate-500">PDF</span>
+              <% end %>
+            <% end %>
+            <div class="mt-2 flex items-center justify-between gap-2">
+              <span class="truncate text-slate-600"><%= receipt.filename %></span>
+              <%= button_to "Remove", transaction_receipt_path(@transaction, receipt), method: :delete,
+                    class: "text-xs font-medium text-rose-600 hover:text-rose-500" %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <div class="mt-6 flex items-center justify-between">
     <%= link_to "Repeat today", new_transaction_path(repeat: @transaction), class: "link text-sm" %>
     <%= button_to "Delete transaction", transaction_path(@transaction), method: :delete,

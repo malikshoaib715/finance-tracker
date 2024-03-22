@@ -62,6 +62,17 @@
   </div>
 
   <div>
+    <%= f.label :receipts, class: "form-label" %>
+    <%# Keep already-uploaded receipts: assigning to has_many_attached replaces the set. %>
+    <% transaction.receipts.each do |receipt| %>
+      <%= f.hidden_field :receipts, multiple: true, value: receipt.signed_id %>
+    <% end %>
+    <%= f.file_field :receipts, multiple: true, accept: Transaction::RECEIPT_TYPES.join(","),
+          class: "mt-1 block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200" %>
+    <p class="mt-1 text-xs text-slate-500">Images or PDFs, up to 5 MB each.</p>
+  </div>
+
+  <div>
     <%= f.label :notes, class: "form-label" %>
     <%= f.text_area :notes, rows: 2, class: "form-input" %>
   </div>

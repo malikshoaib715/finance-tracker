@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resource :dashboard, only: :show, controller: "dashboard"
   resources :transactions, except: :show do
     get :export, on: :collection, defaults: { format: :csv }
+    resources :receipts, only: :destroy, module: :transactions
   end
   resources :transfers, except: %i[ index show ]
   resources :categories, except: :show
