@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_21_060828) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_25_164330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,6 +53,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_060828) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "budgets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "category_id", null: false
+    t.date "month", null: false
+    t.bigint "amount_cents", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_budgets_on_category_id"
+    t.index ["user_id", "category_id", "month"], name: "index_budgets_on_user_id_and_category_id_and_month", unique: true
+    t.index ["user_id"], name: "index_budgets_on_user_id"
+    t.check_constraint "amount_cents > 0", name: "budgets_amount_positive"
+    t.check_constraint "month = date_trunc('month'::text, month::timestamp with time zone)::date", name: "budgets_month_is_first_day"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -143,6 +157,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_21_060828) do
   add_foreign_key "accounts", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "budgets", "categories", on_delete: :cascade
+  add_foreign_key "budgets", "users"
   add_foreign_key "categories", "users"
   add_foreign_key "taggings", "tags", on_delete: :cascade
   add_foreign_key "taggings", "transactions", on_delete: :cascade

@@ -1,0 +1,11 @@
+ayesha_groceries:
+  user: ayesha
+  category: ayesha_groceries
+  month: <%= Date.current.beginning_of_month %>
+  amount_cents: 500000
+
+ayesha_rent:
+  user: ayesha
+  category: ayesha_rent
+  month: <%= Date.current.beginning_of_month %>
+  amount_cents: 6000000

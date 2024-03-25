@@ -14,6 +14,7 @@ class Category < ApplicationRecord
 
   belongs_to :user
   has_many :transactions, dependent: :nullify
+  has_many :budgets, dependent: :delete_all
 
   enum :kind, { expense: "expense", income: "income" }, default: :expense, validate: true
 

@@ -1,0 +1,27 @@
+require "test_helper"
+
+class BudgetTest < ActiveSupport::TestCase
+  test "tracks spending against the limit for its month" do
+    budget = budgets(:ayesha_groceries)
+    assert_equal 435_000, budget.spent_cents
+    assert_equal 65_000, budget.remaining_cents
+    assert_equal :warning, budget.status
+
+    assert_equal :over, budgets(:ayesha_rent).status
+  end
+
+  test "normalises the month to its first day" do
+    budget = users(:ayesha).budgets.build(month: Date.new(2024, 3, 17))
+    assert_equal Date.new(2024, 3, 1), budget.month
+  end
+
+  test "one budget per category per month" do
+    duplicate = users(:ayesha).budgets.build(category: categories(:ayesha_groceries), month: Date.current, amount: "100")
+    assert_not duplicate.valid?
+  end
+
+  test "only expense categories of the same user" do
+    assert_not users(:ayesha).budgets.build(category: categories(:ayesha_salary), month: Date.current, amount: "100").valid?
+    assert_not users(:ayesha).budgets.build(category: categories(:bilal_groceries), month: Date.current, amount: "100").valid?
+  end
+end
