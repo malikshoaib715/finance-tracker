@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   end
   resources :transfers, except: %i[ index show ]
   resources :categories, except: :show
+  resources :budgets, except: :show
   resources :accounts do
     resource :archive, only: %i[ create destroy ], module: :accounts
   end

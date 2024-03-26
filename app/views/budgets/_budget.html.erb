@@ -1,0 +1,19 @@
+<li id="<%= dom_id(budget) %>" class="px-4 py-4">
+  <div class="flex items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <%= category_dot(budget.category.color) %>
+      <%= link_to budget.category.name, edit_budget_path(budget), class: "font-medium text-slate-900 hover:underline" %>
+    </div>
+    <p class="text-sm tabular-nums text-slate-600">
+      <%= money(budget.spent_cents) %> <span class="text-slate-400">of</span> <%= money(budget.amount_cents) %>
+    </p>
+  </div>
+  <div class="mt-2"><%= budget_bar(budget) %></div>
+  <p class="mt-1 text-xs <%= budget.status == :over ? "text-rose-600" : "text-slate-500" %>">
+    <% if budget.status == :over %>
+      Over by <%= money(-budget.remaining_cents) %>
+    <% else %>
+      <%= money(budget.remaining_cents) %> left
+    <% end %>
+  </p>
+</li>

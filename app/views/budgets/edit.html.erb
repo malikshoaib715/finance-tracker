@@ -1,0 +1,14 @@
+<% content_for :title, "Edit budget" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @budget.category.name %> · <%= l(@budget.month, format: "%B %Y") %></h1>
+  <div class="card mt-6">
+    <%= render "form", budget: @budget, categories: @categories %>
+  </div>
+
+  <div class="mt-6 flex justify-end">
+    <%= button_to "Remove budget", budget_path(@budget), method: :delete,
+          form: { data: { turbo_confirm: "Remove this budget?" } },
+          class: "text-sm font-medium text-rose-600 hover:text-rose-500" %>
+  </div>
+</div>

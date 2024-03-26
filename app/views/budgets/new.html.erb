@@ -1,0 +1,8 @@
+<% content_for :title, "New budget" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Budget for <%= l(@budget.month, format: "%B %Y") %></h1>
+  <div class="card mt-6">
+    <%= render "form", budget: @budget, categories: @categories %>
+  </div>
+</div>

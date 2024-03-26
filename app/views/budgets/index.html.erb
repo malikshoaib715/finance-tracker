@@ -1,0 +1,23 @@
+<% content_for :title, "Budgets" %>
+
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Budgets</h1>
+  <%= link_to "New budget", new_budget_path(month: @month.strftime("%Y-%m")), class: "btn-primary" %>
+</div>
+
+<nav class="mt-6 flex items-center justify-between" aria-label="Month">
+  <%= link_to "← #{l(@month.prev_month, format: '%b %Y')}", budgets_path(month: @month.prev_month.strftime("%Y-%m")), class: "btn-secondary" %>
+  <h2 class="text-lg font-semibold text-slate-900"><%= l(@month, format: "%B %Y") %></h2>
+  <%= link_to "#{l(@month.next_month, format: '%b %Y')} →", budgets_path(month: @month.next_month.strftime("%Y-%m")), class: "btn-secondary" %>
+</nav>
+
+<% if @budgets.any? %>
+  <ul class="card mt-6 divide-y divide-slate-100 p-0">
+    <%= render @budgets %>
+  </ul>
+<% else %>
+  <div class="card mt-6 py-12 text-center">
+    <p class="text-slate-600">No budgets for <%= l(@month, format: "%B %Y") %> yet.</p>
+    <%= link_to "Set your first budget", new_budget_path(month: @month.strftime("%Y-%m")), class: "btn-primary mt-4" %>
+  </div>
+<% end %>
