@@ -13,6 +13,18 @@ class Budget < ApplicationRecord
 
   scope :for_month, ->(month) { where(month: month.to_date.beginning_of_month) }
 
+  # Adds each budget's spending as a column so lists don't run a SUM per budget.
+  scope :with_spending, -> {
+    select(<<~SQL.squish)
+      budgets.*,
+      COALESCE((
+        SELECT SUM(t.amount_cents) FROM transactions t
+        WHERE t.user_id = budgets.user_id AND t.category_id = budgets.category_id AND t.kind = 'expense'
+          AND t.occurred_on >= budgets.month AND t.occurred_on < budgets.month + INTERVAL '1 month'
+      ), 0) AS computed_spent_cents
+    SQL
+  }
+
   def amount
     amount_cents.to_i / 100.0 if amount_cents
   end
@@ -24,7 +36,9 @@ class Budget < ApplicationRecord
   end
 
   def spent_cents
-    user.transactions.expense.where(category: category, occurred_on: month.all_month).sum(:amount_cents)
+    return self[:computed_spent_cents] if has_attribute?(:computed_spent_cents)
+
+    @spent_cents ||= user.transactions.expense.where(category: category, occurred_on: month.all_month).sum(:amount_cents)
   end
 
   def remaining_cents

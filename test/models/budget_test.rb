@@ -24,4 +24,13 @@ class BudgetTest < ActiveSupport::TestCase
     assert_not users(:ayesha).budgets.build(category: categories(:ayesha_salary), month: Date.current, amount: "100").valid?
     assert_not users(:ayesha).budgets.build(category: categories(:bilal_groceries), month: Date.current, amount: "100").valid?
   end
+
+  test "with_spending matches the per-budget sum in one query" do
+    user = users(:ayesha)
+    budgets = nil
+    queries = count_queries { budgets = user.budgets.with_spending.to_a.each(&:spent_cents) }
+
+    assert_equal 1, queries
+    budgets.each { |budget| assert_equal Budget.find(budget.id).spent_cents, budget.spent_cents }
+  end
 end

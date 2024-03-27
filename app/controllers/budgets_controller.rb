@@ -4,7 +4,7 @@ class BudgetsController < ApplicationController
 
   def index
     @month = parse_month(params[:month])
-    @budgets = current_user.budgets.for_month(@month).includes(:category).sort_by { |b| b.category.name }
+    @budgets = current_user.budgets.for_month(@month).with_spending.includes(:category).sort_by { |b| b.category.name }
   end
 
   def new
