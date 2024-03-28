@@ -26,4 +26,10 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_select ".card", text: /Spent this month\s+-Rs 69,350.00/
     assert_select ".card", text: /Net\s+Rs 180,650.00/
   end
+
+  test "shows the month's budgets, most used first" do
+    sign_in users(:ayesha)
+    get dashboard_url
+    assert_select "##{ActionView::RecordIdentifier.dom_id(budgets(:ayesha_rent))} + ##{ActionView::RecordIdentifier.dom_id(budgets(:ayesha_groceries))}"
+  end
 end

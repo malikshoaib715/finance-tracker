@@ -6,6 +6,8 @@ class DashboardController < ApplicationController
     @income_cents = month_transactions.income.sum(:amount_cents)
     @expense_cents = month_transactions.expense.sum(:amount_cents)
     @accounts = current_user.accounts.active.alphabetical.with_balances
+    @budgets = current_user.budgets.for_month(@month.first).with_spending.includes(:category)
+      .sort_by { |budget| -budget.ratio }.first(4)
     @recent_transactions = current_user.transactions.includes(:account, :category, :tags).recent_first.limit(5)
   end
 end
