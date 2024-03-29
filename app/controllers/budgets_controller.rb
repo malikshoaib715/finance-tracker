@@ -4,6 +4,7 @@ class BudgetsController < ApplicationController
 
   def index
     @month = parse_month(params[:month])
+    @previous_month_has_budgets = current_user.budgets.for_month(@month.prev_month).exists?
     @budgets = current_user.budgets.for_month(@month).with_spending.includes(:category).sort_by { |b| b.category.name }
   end
 

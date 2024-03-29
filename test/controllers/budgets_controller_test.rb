@@ -29,4 +29,12 @@ class BudgetsControllerTest < ActionDispatch::IntegrationTest
       delete budget_url(budget)
     end
   end
+
+  test "copies the previous month's budgets" do
+    month = Date.current.next_month.strftime("%Y-%m")
+    assert_difference "Budget.count", 2 do
+      post budget_copy_url(month: month)
+    end
+    assert_redirected_to budgets_url(month: month)
+  end
 end

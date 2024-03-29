@@ -33,4 +33,16 @@ class BudgetTest < ActiveSupport::TestCase
     assert_equal 1, queries
     budgets.each { |budget| assert_equal Budget.find(budget.id).spent_cents, budget.spent_cents }
   end
+
+  test "copies last month's budgets without overwriting existing ones" do
+    user = users(:ayesha)
+    next_month = Date.current.next_month
+    user.budgets.create!(category: categories(:ayesha_rent), month: next_month, amount: "70000")
+
+    copied = Budget.copy_previous_month(user, next_month)
+
+    assert_equal [ categories(:ayesha_groceries) ], copied.map(&:category)
+    assert_equal 500_000, copied.first.amount_cents
+    assert_equal 7_000_000, user.budgets.for_month(next_month).find_by(category: categories(:ayesha_rent)).amount_cents
+  end
 end

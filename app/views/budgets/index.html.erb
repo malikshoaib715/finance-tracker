@@ -2,7 +2,13 @@
 
 <div class="flex flex-wrap items-center justify-between gap-4">
   <h1 class="text-2xl font-bold tracking-tight text-slate-900">Budgets</h1>
-  <%= link_to "New budget", new_budget_path(month: @month.strftime("%Y-%m")), class: "btn-primary" %>
+  <div class="flex gap-3">
+    <% if @previous_month_has_budgets %>
+      <%= button_to "Copy #{l(@month.prev_month, format: '%B')}'s budgets", budget_copy_path(month: @month.strftime("%Y-%m")),
+            class: "btn-secondary" %>
+    <% end %>
+    <%= link_to "New budget", new_budget_path(month: @month.strftime("%Y-%m")), class: "btn-primary" %>
+  </div>
 </div>
 
 <nav class="mt-6 flex items-center justify-between" aria-label="Month">

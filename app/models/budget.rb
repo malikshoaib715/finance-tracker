@@ -25,6 +25,17 @@ class Budget < ApplicationRecord
     SQL
   }
 
+  # Copies the previous month's limits into +month+, skipping categories that
+  # already have a budget there. Returns the budgets created.
+  def self.copy_previous_month(user, month)
+    month = month.to_date.beginning_of_month
+    existing = user.budgets.for_month(month).pluck(:category_id)
+
+    user.budgets.for_month(month.prev_month).where.not(category_id: existing).map do |previous|
+      user.budgets.create!(category_id: previous.category_id, month: month, amount_cents: previous.amount_cents)
+    end
+  end
+
   def amount
     amount_cents.to_i / 100.0 if amount_cents
   end
