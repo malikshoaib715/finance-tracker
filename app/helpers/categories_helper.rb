@@ -15,6 +15,18 @@ module CategoriesHelper
     "pink" => "bg-pink-100 text-pink-700"
   }.freeze
 
+  # Tailwind 500 shades, for charts.
+  HEX = {
+    "slate" => "#64748b", "red" => "#ef4444", "orange" => "#f97316", "amber" => "#f59e0b",
+    "lime" => "#84cc16", "emerald" => "#10b981", "teal" => "#14b8a6", "sky" => "#0ea5e9",
+    "indigo" => "#6366f1", "violet" => "#8b5cf6", "pink" => "#ec4899"
+  }.freeze
+
+  def category_chart_colors(names)
+    colors = current_user.categories.where(name: names).pluck(:name, :color).to_h
+    names.map { |name| HEX.fetch(colors[name], HEX["slate"]) }
+  end
+
   def category_dot(color)
     tag.span class: [ "inline-block h-2.5 w-2.5 rounded-full", DOT_CLASSES.fetch(color, DOT_CLASSES["slate"]) ]
   end

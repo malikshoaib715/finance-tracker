@@ -32,4 +32,12 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     get dashboard_url
     assert_select "##{ActionView::RecordIdentifier.dom_id(budgets(:ayesha_rent))} + ##{ActionView::RecordIdentifier.dom_id(budgets(:ayesha_groceries))}"
   end
+
+  test "charts this month's spending by category" do
+    sign_in users(:ayesha)
+    get dashboard_url
+    assert_select "h2", "Where the money went"
+    assert_match "Groceries", response.body
+    assert_match "Chartkick", response.body
+  end
 end

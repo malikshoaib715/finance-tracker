@@ -26,6 +26,17 @@
   </div>
 </div>
 
+<% if @spending_by_category.any? %>
+  <section class="card mt-6">
+    <h2 class="font-semibold text-slate-900">Where the money went</h2>
+    <div class="mt-4">
+      <%= pie_chart @spending_by_category, donut: true, legend: "right", height: "260px",
+            colors: category_chart_colors(@spending_by_category.keys),
+            prefix: MoneyHelper::CURRENCY_UNITS.fetch(current_user.currency, ""), thousands: ",", round: 2 %>
+    </div>
+  </section>
+<% end %>
+
 <div class="mt-8 grid gap-6 lg:grid-cols-3">
   <section class="lg:col-span-2">
     <div class="mb-2 flex items-center justify-between">

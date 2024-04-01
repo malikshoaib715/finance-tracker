@@ -26,6 +26,10 @@ gem "stimulus-rails"
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
 gem "tailwindcss-rails"
 
+# Charts [https://chartkick.com] and time-series grouping [https://github.com/ankane/groupdate]
+gem "chartkick"
+gem "groupdate"
+
 # CSV leaves the default gems in Ruby 3.4; declare it explicitly
 gem "csv"
 
