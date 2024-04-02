@@ -1,0 +1,13 @@
+<% content_for :title, "Reports" %>
+<% unit = MoneyHelper::CURRENCY_UNITS.fetch(current_user.currency, "") %>
+
+<h1 class="text-2xl font-bold tracking-tight text-slate-900">Reports</h1>
+
+<section class="card mt-6">
+  <h2 class="font-semibold text-slate-900">Income vs expenses</h2>
+  <p class="text-sm text-slate-500">Last 12 months</p>
+  <div class="mt-4">
+    <%= column_chart @cash_flow.chart_data, colors: [ "#10b981", "#f43f5e" ], height: "300px",
+          prefix: unit, thousands: ",", round: 0 %>
+  </div>
+</section>

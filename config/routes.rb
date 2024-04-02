@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :transfers, except: %i[ index show ]
   resources :categories, except: :show
   resources :budgets, except: :show
+  resource :reports, only: :show
   resource :budget_copy, only: :create, controller: "budgets/copies"
   resources :accounts do
     resource :archive, only: %i[ create destroy ], module: :accounts
