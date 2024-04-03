@@ -1,0 +1,36 @@
+<section class="card mt-6 overflow-hidden p-0">
+  <div class="flex items-center justify-between px-4 py-3">
+    <div>
+      <h2 class="font-semibold text-slate-900">Spending by category</h2>
+      <p class="text-sm text-slate-500"><%= l(breakdown.month, format: "%B %Y") %> compared with <%= l(breakdown.month.prev_month, format: "%B") %></p>
+    </div>
+    <p class="text-sm font-semibold"><%= money(breakdown.total_cents) %></p>
+  </div>
+
+  <% if breakdown.rows.any? %>
+    <table class="min-w-full divide-y divide-slate-200 text-sm">
+      <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+        <tr>
+          <th class="px-4 py-2">Category</th>
+          <th class="px-4 py-2 text-right">Spent</th>
+          <th class="px-4 py-2 text-right">Share</th>
+          <th class="px-4 py-2 text-right">vs last month</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% breakdown.rows.each do |row| %>
+          <tr>
+            <td class="px-4 py-2"><span class="flex items-center gap-2"><%= category_dot(row.color) %><%= row.name %></span></td>
+            <td class="px-4 py-2 text-right tabular-nums"><%= money(row.amount_cents) %></td>
+            <td class="px-4 py-2 text-right tabular-nums text-slate-500"><%= number_to_percentage(row.share * 100, precision: 0) %></td>
+            <td class="px-4 py-2 text-right tabular-nums <%= row.change_cents.positive? ? "text-rose-600" : "text-emerald-700" %>">
+              <%= row.change_cents.positive? ? "+" : "" %><%= money(row.change_cents) %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p class="px-4 pb-6 text-sm text-slate-600">No spending recorded this month.</p>
+  <% end %>
+</section>
