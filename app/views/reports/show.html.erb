@@ -12,4 +12,15 @@
   </div>
 </section>
 
+<section class="card mt-6">
+  <h2 class="font-semibold text-slate-900">Net worth</h2>
+  <p class="text-sm text-slate-500">
+    Combined balance of your <%= current_user.currency %> accounts at the end of each month
+    <% if @net_worth.other_currencies? %>(accounts in other currencies aren't included)<% end %>
+  </p>
+  <div class="mt-4">
+    <%= line_chart @net_worth.series, colors: [ "#059669" ], height: "260px", prefix: unit, thousands: ",", round: 0 %>
+  </div>
+</section>
+
 <%= render "category_breakdown", breakdown: @breakdown %>
