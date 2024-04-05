@@ -4,7 +4,15 @@
       <h2 class="font-semibold text-slate-900">Spending by category</h2>
       <p class="text-sm text-slate-500"><%= l(breakdown.month, format: "%B %Y") %> compared with <%= l(breakdown.month.prev_month, format: "%B") %></p>
     </div>
-    <p class="text-sm font-semibold"><%= money(breakdown.total_cents) %></p>
+    <div class="flex items-center gap-3">
+      <%= link_to "←", reports_path(month: breakdown.month.prev_month.strftime("%Y-%m")),
+            class: "btn-secondary px-3", aria: { label: "Previous month" } %>
+      <p class="text-sm font-semibold"><%= money(breakdown.total_cents) %></p>
+      <% if breakdown.month.next_month <= Date.current %>
+        <%= link_to "→", reports_path(month: breakdown.month.next_month.strftime("%Y-%m")),
+              class: "btn-secondary px-3", aria: { label: "Next month" } %>
+      <% end %>
+    </div>
   </div>
 
   <% if breakdown.rows.any? %>
