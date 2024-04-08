@@ -8,15 +8,22 @@ class Reports::NetWorth
     @today = today
   end
 
+  # Three queries regardless of the number of months: opening balances, the
+  # movements before the window, and one grouped SUM per month accumulated in Ruby.
   def series
     accounts = @user.accounts.where(currency: @user.currency)
-    opening = accounts.sum(:opening_balance_cents)
     signed = Arel.sql("CASE WHEN transactions.kind = 'income' THEN amount_cents ELSE -amount_cents END")
     movements = @user.transactions.where(account: accounts)
+    first_month = month_ends.first.beginning_of_month
 
-    month_ends.index_with do |month_end|
-      (opening + movements.where(occurred_on: ..month_end).sum(signed)) / 100.0
-    end.transform_keys { |date| date.strftime("%b %Y") }
+    running = accounts.sum(:opening_balance_cents) + movements.where(occurred_on: ...first_month).sum(signed)
+    per_month = movements.where(occurred_on: first_month..month_ends.last)
+      .group(Arel.sql("date_trunc('month', occurred_on)::date")).sum(signed)
+
+    month_ends.to_h do |month_end|
+      running += per_month.fetch(month_end.beginning_of_month, 0)
+      [ month_end.strftime("%b %Y"), running / 100.0 ]
+    end
   end
 
   def other_currencies?

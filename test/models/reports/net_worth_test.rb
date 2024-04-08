@@ -16,4 +16,9 @@ class Reports::NetWorthTest < ActiveSupport::TestCase
     assert report.other_currencies?
     assert_equal 339_150.0, report.series.values.last
   end
+
+  test "runs a fixed number of queries however many months are shown" do
+    user = users(:ayesha)
+    assert_equal 3, count_queries { Reports::NetWorth.new(user, months: 24).series }
+  end
 end
