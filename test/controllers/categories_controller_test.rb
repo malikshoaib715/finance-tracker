@@ -34,4 +34,11 @@ class CategoriesControllerTest < ActionDispatch::IntegrationTest
     delete category_url(categories(:bilal_groceries))
     assert_response :not_found
   end
+
+  test "shows a category with its trend and transactions" do
+    get category_url(categories(:ayesha_groceries))
+    assert_response :success
+    assert_select "h1", "Groceries"
+    assert_select "##{ActionView::RecordIdentifier.dom_id(transactions(:groceries))}"
+  end
 end

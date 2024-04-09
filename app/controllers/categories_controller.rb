@@ -1,10 +1,17 @@
 class CategoriesController < ApplicationController
-  before_action :set_category, only: %i[ edit update destroy ]
+  before_action :set_category, only: %i[ show edit update destroy ]
 
   def index
     categories = current_user.categories.alphabetical
     @expense_categories = categories.expense
     @income_categories = categories.income
+  end
+
+  def show
+    range = (Date.current.beginning_of_month << 5)..Date.current.end_of_month
+    @trend = @category.transactions.group_by_month(:occurred_on, range: range, format: "%b %Y")
+      .sum(:amount_cents).transform_values { |cents| cents / 100.0 }
+    @transactions = @category.transactions.includes(:account, :category, :tags).recent_first.limit(20)
   end
 
   def new

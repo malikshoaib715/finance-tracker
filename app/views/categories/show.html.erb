@@ -1,0 +1,29 @@
+<% content_for :title, @category.name %>
+
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <div class="flex items-center gap-3">
+    <%= category_dot(@category.color) %>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @category.name %></h1>
+    <span class="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"><%= @category.kind.humanize %></span>
+  </div>
+  <%= link_to "Edit", edit_category_path(@category), class: "btn-secondary" %>
+</div>
+
+<section class="card mt-6">
+  <h2 class="font-semibold text-slate-900">Last 6 months</h2>
+  <div class="mt-4">
+    <%= column_chart @trend, colors: [ CategoriesHelper::HEX.fetch(@category.color) ], height: "220px",
+          prefix: MoneyHelper::CURRENCY_UNITS.fetch(current_user.currency, ""), thousands: ",", round: 0 %>
+  </div>
+</section>
+
+<section class="mt-6">
+  <h2 class="mb-2 font-semibold text-slate-900">Recent transactions</h2>
+  <% if @transactions.any? %>
+    <ul class="card divide-y divide-slate-100 p-0">
+      <%= render @transactions %>
+    </ul>
+  <% else %>
+    <div class="card py-8 text-center text-sm text-slate-600">Nothing in this category yet.</div>
+  <% end %>
+</section>

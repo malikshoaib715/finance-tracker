@@ -28,7 +28,12 @@
       <tbody class="divide-y divide-slate-100">
         <% breakdown.rows.each do |row| %>
           <tr>
-            <td class="px-4 py-2"><span class="flex items-center gap-2"><%= category_dot(row.color) %><%= row.name %></span></td>
+            <td class="px-4 py-2">
+              <span class="flex items-center gap-2">
+                <%= category_dot(row.color) %>
+                <%= row.category_id ? link_to(row.name, category_path(row.category_id), class: "hover:underline") : row.name %>
+              </span>
+            </td>
             <td class="px-4 py-2 text-right tabular-nums"><%= money(row.amount_cents) %></td>
             <td class="px-4 py-2 text-right tabular-nums text-slate-500"><%= number_to_percentage(row.share * 100, precision: 0) %></td>
             <td class="px-4 py-2 text-right tabular-nums <%= row.change_cents.positive? ? "text-rose-600" : "text-emerald-700" %>">
