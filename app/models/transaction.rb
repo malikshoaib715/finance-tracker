@@ -37,6 +37,13 @@ class Transaction < ApplicationRecord
     self.amount_cents = nil
   end
 
+  # The budget this expense counts against, if one is set for its month.
+  def budget
+    return unless expense? && category_id
+
+    user.budgets.find_by(category_id: category_id, month: occurred_on.beginning_of_month)
+  end
+
   def tag_list
     tags.map(&:name).join(", ")
   end

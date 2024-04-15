@@ -37,7 +37,7 @@ class TransactionsController < ApplicationController
     @transaction = current_user.transactions.build(transaction_params)
 
     if @transaction.save
-      redirect_to transactions_path, notice: "Transaction added."
+      redirect_to transactions_path, notice: "Transaction added.", alert: budget_warning(@transaction)
     else
       render :new, status: :unprocessable_entity
     end
@@ -48,7 +48,7 @@ class TransactionsController < ApplicationController
 
   def update
     if @transaction.update(transaction_params)
-      redirect_to transactions_path, notice: "Transaction updated."
+      redirect_to transactions_path, notice: "Transaction updated.", alert: budget_warning(@transaction)
     else
       render :edit, status: :unprocessable_entity
     end
@@ -68,6 +68,16 @@ class TransactionsController < ApplicationController
   def load_form_options
     @accounts = current_user.accounts.active.alphabetical
     @categories = current_user.categories.alphabetical
+  end
+
+  def budget_warning(transaction)
+    budget = transaction.budget or return
+    category = budget.category.name
+
+    case budget.status
+    when :over then "You're over your #{category} budget by #{helpers.money(-budget.remaining_cents)}."
+    when :warning then "Heads up: #{helpers.number_to_percentage(budget.ratio * 100, precision: 0)} of your #{category} budget is used."
+    end
   end
 
   def filter_params

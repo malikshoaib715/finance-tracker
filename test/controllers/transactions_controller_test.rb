@@ -74,4 +74,20 @@ class TransactionsControllerTest < ActionDispatch::IntegrationTest
     get transactions_url
     assert_select "##{ActionView::RecordIdentifier.dom_id(transactions(:rent))}", text: /#housing/
   end
+
+  test "warns when an expense takes a category over budget" do
+    post transactions_url, params: { transaction: {
+      kind: "expense", amount: "1,000", occurred_on: Date.current, description: "Big shop",
+      account_id: accounts(:ayesha_cash).id, category_id: categories(:ayesha_groceries).id
+    } }
+    assert_equal "You're over your Groceries budget by Rs 350.00.", flash[:alert]
+  end
+
+  test "no warning without a budget" do
+    post transactions_url, params: { transaction: {
+      kind: "expense", amount: "10", occurred_on: Date.current, description: "Tea",
+      account_id: accounts(:ayesha_cash).id
+    } }
+    assert_nil flash[:alert]
+  end
 end
