@@ -1,0 +1,29 @@
+<% content_for :title, "Import transactions" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Import a bank statement</h1>
+  <p class="mt-1 text-sm text-slate-600">Upload the CSV export from your bank. You'll match its columns on the next step.</p>
+
+  <div class="card mt-6">
+    <%= form_with model: @import, class: "space-y-5" do |f| %>
+      <%= render "shared/form_errors", record: @import %>
+
+      <div>
+        <%= f.label :account_id, "Import into", class: "form-label" %>
+        <%= f.collection_select :account_id, @accounts, :id, :name, {}, class: "form-input" %>
+      </div>
+
+      <div>
+        <%= f.label :file, "CSV file", class: "form-label" %>
+        <%= f.file_field :file, accept: ".csv,text/csv", required: true,
+              class: "mt-1 block w-full text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200" %>
+        <p class="mt-1 text-xs text-slate-500">Up to 1 MB. The first row must contain column names.</p>
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <%= link_to "Cancel", imports_path, class: "btn-secondary" %>
+        <%= f.submit "Upload", class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

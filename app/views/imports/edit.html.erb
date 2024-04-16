@@ -1,0 +1,9 @@
+<% content_for :title, "Map columns" %>
+
+<div class="mx-auto w-full max-w-3xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @import.filename %></h1>
+  <p class="mt-1 text-sm text-slate-600">
+    <%= pluralize(@import.table.size, "row") %> into <strong><%= @import.account.name %></strong>.
+    Columns found: <%= @import.headers.to_sentence %>.
+  </p>
+</div>

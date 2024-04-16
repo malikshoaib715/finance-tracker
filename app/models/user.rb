@@ -7,6 +7,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :confirmable
 
   # Transactions first: accounts refuse to be destroyed while they still have any.
+  has_many :imports, dependent: :delete_all
   has_many :transactions, dependent: :delete_all
   has_many :transfers, dependent: :delete_all
   has_many :accounts, dependent: :destroy
