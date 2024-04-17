@@ -20,10 +20,30 @@ class ImportsController < ApplicationController
   end
 
   def edit
+    @import = current_user.imports.find(params[:id]).suggest_mapping
+  end
+
+  def update
+    @import = current_user.imports.find(params[:id])
+
+    if @import.update(mapping_params.merge(status: "mapped"))
+      redirect_to import_path(@import)
+    else
+      @import.status = "uploaded"
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def show
     @import = current_user.imports.find(params[:id])
   end
 
   private
+
+  def mapping_params
+    params.require(:import).permit(:date_column, :description_column, :amount_mode, :amount_column,
+                                   :debit_column, :credit_column, :date_format)
+  end
 
   def import_params
     params.require(:import).permit(:account_id, :file)

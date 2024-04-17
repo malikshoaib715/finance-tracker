@@ -4,6 +4,61 @@
   <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @import.filename %></h1>
   <p class="mt-1 text-sm text-slate-600">
     <%= pluralize(@import.table.size, "row") %> into <strong><%= @import.account.name %></strong>.
-    Columns found: <%= @import.headers.to_sentence %>.
+    Tell us which columns hold what.
   </p>
+
+  <div class="card mt-6">
+    <%= form_with model: @import, class: "space-y-5", data: { controller: "toggle-mode" } do |f| %>
+      <%= render "shared/form_errors", record: @import %>
+      <% columns = @import.headers %>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <%= f.label :date_column, "Date", class: "form-label" %>
+          <%= f.select :date_column, columns, {}, class: "form-input" %>
+        </div>
+        <div>
+          <%= f.label :date_format, "Date format", class: "form-label" %>
+          <%= f.select :date_format, Import::DATE_FORMATS.map { |fmt, example| [ example, fmt ] }, {}, class: "form-input" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :description_column, "Description", class: "form-label" %>
+        <%= f.select :description_column, columns, {}, class: "form-input" %>
+      </div>
+
+      <fieldset class="space-y-2">
+        <legend class="form-label">Amounts</legend>
+        <% Import::AMOUNT_MODES.each do |mode, label| %>
+          <label class="flex items-center gap-2 text-sm text-slate-700">
+            <%= f.radio_button :amount_mode, mode, class: "form-checkbox rounded-full",
+                  data: { action: "toggle-mode#update", toggle_mode_target: "mode" } %>
+            <%= label %>
+          </label>
+        <% end %>
+      </fieldset>
+
+      <div data-toggle-mode-target="panel" data-mode="single">
+        <%= f.label :amount_column, "Amount column", class: "form-label" %>
+        <%= f.select :amount_column, columns, { include_blank: true }, class: "form-input sm:w-1/2" %>
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2" data-toggle-mode-target="panel" data-mode="split">
+        <div>
+          <%= f.label :debit_column, "Money out (debit)", class: "form-label" %>
+          <%= f.select :debit_column, columns, { include_blank: true }, class: "form-input" %>
+        </div>
+        <div>
+          <%= f.label :credit_column, "Money in (credit)", class: "form-label" %>
+          <%= f.select :credit_column, columns, { include_blank: true }, class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3">
+        <%= link_to "Cancel", imports_path, class: "btn-secondary" %>
+        <%= f.submit "Preview", class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
 </div>

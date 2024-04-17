@@ -21,4 +21,20 @@ class ImportTest < ActiveSupport::TestCase
   test "account must belong to the user" do
     assert_not users(:ayesha).imports.build(account: accounts(:bilal_bank), file: upload).valid?
   end
+
+  test "suggests a mapping from common bank headers" do
+    import = users(:ayesha).imports.create!(account: accounts(:ayesha_bank), file: upload).suggest_mapping
+    assert_equal "Date", import.date_column
+    assert_equal "Narration", import.description_column
+    assert_equal "split", import.amount_mode
+    assert_equal [ "Debit", "Credit" ], [ import.debit_column, import.credit_column ]
+  end
+
+  test "a mapped import needs real columns" do
+    import = users(:ayesha).imports.create!(account: accounts(:ayesha_bank), file: upload)
+    import.assign_attributes(status: "mapped", date_column: "Nope", description_column: "Narration",
+                             amount_mode: "single", amount_column: "Debit", date_format: "%d/%m/%Y")
+    assert_not import.valid?
+    assert import.errors[:date_column].any?
+  end
 end

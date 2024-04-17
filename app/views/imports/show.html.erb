@@ -1,0 +1,6 @@
+<% content_for :title, "Preview import" %>
+
+<div class="mx-auto w-full max-w-3xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @import.filename %></h1>
+  <p class="mt-1 text-sm text-slate-600">Columns mapped. <%= link_to "Change mapping", edit_import_path(@import), class: "link" %></p>
+</div>

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     resources :receipts, only: :destroy, module: :transactions
   end
   resources :transfers, except: %i[ index show ]
-  resources :imports, only: %i[ index new create edit ]
+  resources :imports, only: %i[ index new create edit update show ]
   resources :categories
   resources :budgets, except: :show
   resource :reports, only: :show
