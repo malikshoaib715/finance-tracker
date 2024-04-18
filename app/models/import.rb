@@ -39,6 +39,10 @@ class Import < ApplicationRecord
     @table ||= CSV.parse(raw_csv, headers: true, skip_blanks: true)
   end
 
+  def rows
+    Import::Parser.new(self).rows
+  end
+
   # Best guesses from common bank header names, used to pre-fill the mapping form.
   def suggest_mapping
     find = ->(*words) { headers.find { |h| words.any? { |w| h.to_s.downcase.include?(w) } } }

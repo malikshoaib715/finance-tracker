@@ -1,6 +1,47 @@
 <% content_for :title, "Preview import" %>
+<% rows = @import.rows %>
+<% importable = rows.count(&:importable?) %>
 
-<div class="mx-auto w-full max-w-3xl">
-  <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @import.filename %></h1>
-  <p class="mt-1 text-sm text-slate-600">Columns mapped. <%= link_to "Change mapping", edit_import_path(@import), class: "link" %></p>
+<div class="flex flex-wrap items-start justify-between gap-4">
+  <div>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @import.filename %></h1>
+    <p class="mt-1 text-sm text-slate-600">
+      <%= pluralize(importable, "transaction") %> ready for <strong><%= @import.account.name %></strong>
+      <% if (skipped = rows.size - importable).positive? %>· <%= skipped %> will be skipped<% end %>
+      · <%= link_to "Change mapping", edit_import_path(@import), class: "link" %>
+    </p>
+  </div>
+</div>
+
+<div class="card mt-6 overflow-x-auto p-0">
+  <table class="min-w-full divide-y divide-slate-200 text-sm">
+    <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+      <tr>
+        <th class="px-4 py-2">Line</th>
+        <th class="px-4 py-2">Date</th>
+        <th class="px-4 py-2">Description</th>
+        <th class="px-4 py-2 text-right">Amount</th>
+        <th class="px-4 py-2">Status</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-slate-100">
+      <% rows.each do |row| %>
+        <tr class="<%= "bg-rose-50/50" unless row.importable? %>">
+          <td class="px-4 py-2 text-slate-400"><%= row.line %></td>
+          <td class="whitespace-nowrap px-4 py-2"><%= row.occurred_on ? l(row.occurred_on, format: :short) : "—" %></td>
+          <td class="px-4 py-2"><%= row.description %></td>
+          <td class="px-4 py-2 text-right"><%= row.amount_cents ? money_tag(row.signed_amount_cents, @import.account.currency) : "—" %></td>
+          <td class="px-4 py-2 text-xs">
+            <% if !row.valid? %>
+              <span class="text-rose-700"><%= row.errors.to_sentence.upcase_first %></span>
+            <% elsif row.duplicate? %>
+              <span class="text-amber-700">Already recorded</span>
+            <% else %>
+              <span class="text-emerald-700">Ready</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
