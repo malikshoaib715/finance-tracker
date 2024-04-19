@@ -1,4 +1,5 @@
 class ImportsController < ApplicationController
+  include ActionView::Helpers::TextHelper
   def index
     @imports = current_user.imports.includes(:account).recent_first
   end
@@ -36,6 +37,13 @@ class ImportsController < ApplicationController
 
   def show
     @import = current_user.imports.find(params[:id])
+  end
+
+  def run
+    import = current_user.imports.mapped.find(params[:id])
+    import.run!
+    redirect_to transactions_path, notice: "Imported #{pluralize(import.imported_count, "transaction")}" \
+      "#{" (#{import.skipped_count} skipped)" if import.skipped_count.positive?}."
   end
 
   private

@@ -10,10 +10,12 @@
     <% @imports.each do |import| %>
       <li id="<%= dom_id(import) %>" class="flex items-center justify-between px-4 py-3 text-sm">
         <div>
-          <p class="font-medium text-slate-900"><%= import.filename %></p>
+          <%= link_to import.filename, import.uploaded? ? edit_import_path(import) : import_path(import), class: "font-medium text-slate-900 hover:underline" %>
           <p class="text-xs text-slate-500"><%= import.account.name %> · <%= l(import.created_at.to_date, format: :long) %></p>
         </div>
-        <span class="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600"><%= import.status.humanize %></span>
+        <span class="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">
+          <%= import.completed? ? "#{import.imported_count} imported" : import.status.humanize %>
+        </span>
       </li>
     <% end %>
   </ul>

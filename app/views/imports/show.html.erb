@@ -11,6 +11,11 @@
       · <%= link_to "Change mapping", edit_import_path(@import), class: "link" %>
     </p>
   </div>
+  <% if @import.mapped? && importable.positive? %>
+    <%= button_to "Import #{pluralize(importable, "transaction")}", run_import_path(@import), class: "btn-primary" %>
+  <% elsif @import.completed? %>
+    <span class="rounded bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">Imported</span>
+  <% end %>
 </div>
 
 <div class="card mt-6 overflow-x-auto p-0">

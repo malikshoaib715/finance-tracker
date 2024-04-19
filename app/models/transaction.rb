@@ -2,6 +2,7 @@ class Transaction < ApplicationRecord
   belongs_to :user
   belongs_to :account
   belongs_to :category, optional: true
+  belongs_to :import, optional: true
   has_many :taggings, foreign_key: :transaction_id, inverse_of: :owner_transaction, dependent: :delete_all
   has_many :tags, through: :taggings
   has_many_attached :receipts

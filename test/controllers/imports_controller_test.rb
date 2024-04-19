@@ -31,4 +31,24 @@ class ImportsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to import_url(import)
     assert import.reload.mapped?
   end
+
+  test "runs a mapped import and creates its transactions" do
+    import = users(:ayesha).imports.create!(account: accounts(:ayesha_bank),
+      file: fixture_file_upload("meezan_statement.csv", "text/csv"))
+    import.update!(status: "mapped", date_column: "Date", description_column: "Narration",
+      amount_mode: "split", debit_column: "Debit", credit_column: "Credit", date_format: "%d/%m/%Y")
+
+    assert_difference "Transaction.count", 3 do
+      post run_import_url(import)
+    end
+    assert_redirected_to transactions_url
+    assert_equal "Imported 3 transactions.", flash[:notice]
+    assert import.reload.completed?
+    assert_equal 3, import.transactions.count
+
+    assert_no_difference "Transaction.count" do
+      post run_import_url(import)
+    end
+    assert_response :not_found
+  end
 end

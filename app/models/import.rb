@@ -10,6 +10,7 @@ class Import < ApplicationRecord
 
   belongs_to :user
   belongs_to :account
+  has_many :transactions, dependent: :nullify
 
   enum :status, { uploaded: "uploaded", mapped: "mapped", completed: "completed" }, default: :uploaded
 
@@ -41,6 +42,20 @@ class Import < ApplicationRecord
 
   def rows
     Import::Parser.new(self).rows
+  end
+
+  # Creates a transaction for every importable row, all or nothing.
+  def run!
+    raise ArgumentError, "Import ##{id} isn't ready to run" unless mapped?
+
+    importable, skipped = rows.partition(&:importable?)
+    Import.transaction do
+      importable.each do |row|
+        transactions.create!(user: user, account: account, kind: row.kind, amount_cents: row.amount_cents,
+                             occurred_on: row.occurred_on, description: row.description)
+      end
+      update!(status: "completed", imported_count: importable.size, skipped_count: skipped.size, completed_at: Time.current)
+    end
   end
 
   # Best guesses from common bank header names, used to pre-fill the mapping form.
