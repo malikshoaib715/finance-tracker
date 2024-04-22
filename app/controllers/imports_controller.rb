@@ -46,6 +46,13 @@ class ImportsController < ApplicationController
       "#{" (#{import.skipped_count} skipped)" if import.skipped_count.positive?}."
   end
 
+  def undo
+    import = current_user.imports.completed.find(params[:id])
+    count = import.transactions.count
+    import.undo!
+    redirect_to imports_path, notice: "Removed #{pluralize(count, "imported transaction")}.", status: :see_other
+  end
+
   private
 
   def mapping_params

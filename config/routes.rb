@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :transfers, except: %i[ index show ]
   resources :imports, only: %i[ index new create edit update show ] do
     post :run, on: :member
+    post :undo, on: :member
   end
   resources :categories
   resources :budgets, except: :show

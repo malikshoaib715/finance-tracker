@@ -12,7 +12,7 @@ class Import < ApplicationRecord
   belongs_to :account
   has_many :transactions, dependent: :nullify
 
-  enum :status, { uploaded: "uploaded", mapped: "mapped", completed: "completed" }, default: :uploaded
+  enum :status, { uploaded: "uploaded", mapped: "mapped", completed: "completed", undone: "undone" }, default: :uploaded
 
   store_accessor :mapping, :date_column, :description_column, :amount_mode, :amount_column,
                  :debit_column, :credit_column, :date_format
@@ -55,6 +55,16 @@ class Import < ApplicationRecord
                              occurred_on: row.occurred_on, description: row.description)
       end
       update!(status: "completed", imported_count: importable.size, skipped_count: skipped.size, completed_at: Time.current)
+    end
+  end
+
+  # Removes the transactions this import created (receipts and tags with them).
+  def undo!
+    raise ArgumentError, "Import ##{id} hasn't run" unless completed?
+
+    Import.transaction do
+      transactions.destroy_all
+      update!(status: "undone")
     end
   end
 

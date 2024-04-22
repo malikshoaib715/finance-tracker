@@ -37,4 +37,32 @@ class ImportTest < ActiveSupport::TestCase
     assert_not import.valid?
     assert import.errors[:date_column].any?
   end
+
+  test "running and undoing an import" do
+    import = users(:ayesha).imports.create!(account: accounts(:ayesha_bank), file: upload)
+    import.update!(status: "mapped", date_column: "Date", description_column: "Narration",
+      amount_mode: "split", debit_column: "Debit", credit_column: "Credit", date_format: "%d/%m/%Y")
+
+    assert_difference "Transaction.count", 3 do
+      import.run!
+    end
+    assert_equal [ 3, 0 ], [ import.imported_count, import.skipped_count ]
+
+    assert_difference "Transaction.count", -3 do
+      import.undo!
+    end
+    assert import.undone?
+  end
+
+  test "re-running the same statement skips everything as duplicates" do
+    first, second = 2.times.map do
+      users(:ayesha).imports.create!(account: accounts(:ayesha_bank), file: upload).tap do |import|
+        import.update!(status: "mapped", date_column: "Date", description_column: "Narration",
+          amount_mode: "split", debit_column: "Debit", credit_column: "Credit", date_format: "%d/%m/%Y")
+      end
+    end
+    first.run!
+    second.run!
+    assert_equal [ 0, 3 ], [ second.imported_count, second.skipped_count ]
+  end
 end
