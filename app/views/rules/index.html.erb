@@ -1,0 +1,29 @@
+<% content_for :title, "Rules" %>
+
+<h1 class="text-2xl font-bold tracking-tight text-slate-900">Categorisation rules</h1>
+<p class="mt-1 text-sm text-slate-600">
+  New and imported transactions without a category are filed automatically when their description matches a rule.
+  The longest matching text wins.
+</p>
+
+<div class="card mt-6">
+  <%= render "form", rule: @rule, categories: @categories %>
+</div>
+
+<% if @rules.any? %>
+  <ul class="card mt-6 divide-y divide-slate-100 p-0">
+    <% @rules.each do |rule| %>
+      <li id="<%= dom_id(rule) %>" class="flex items-center justify-between gap-4 px-4 py-3 text-sm">
+        <span>
+          <span class="font-mono text-slate-900">“<%= rule.pattern %>”</span>
+          <span class="text-slate-400">&rarr;</span>
+          <%= category_badge(rule.category) %>
+        </span>
+        <span class="flex items-center gap-4">
+          <%= link_to "Edit", edit_rule_path(rule), class: "link" %>
+          <%= button_to "Remove", rule_path(rule), method: :delete, class: "text-rose-600 hover:text-rose-500" %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

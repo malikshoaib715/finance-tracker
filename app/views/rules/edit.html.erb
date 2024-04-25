@@ -1,0 +1,9 @@
+<% content_for :title, "Edit rule" %>
+
+<div class="mx-auto w-full max-w-2xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit rule</h1>
+  <div class="card mt-6">
+    <%= render "form", rule: @rule, categories: @categories %>
+  </div>
+  <p class="mt-4"><%= link_to "← Back to rules", rules_path, class: "link text-sm" %></p>
+</div>

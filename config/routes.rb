@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     post :undo, on: :member
   end
   resources :categories
+  resources :rules, except: %i[ show new ]
   resources :budgets, except: :show
   resource :reports, only: :show
   resource :budget_copy, only: :create, controller: "budgets/copies"
