@@ -14,6 +14,8 @@ class Transaction < ApplicationRecord
 
   normalizes :description, with: ->(description) { description.squish }
 
+  before_validation :apply_rules, on: :create
+
   validates :description, presence: true, length: { maximum: 120 }
   validates :occurred_on, presence: true
   validates :amount_cents, numericality: { only_integer: true, greater_than: 0 }
@@ -56,6 +58,13 @@ class Transaction < ApplicationRecord
   end
 
   private
+
+  # Fill in a missing category from the user's rules; never override a choice.
+  def apply_rules
+    return if category || user.nil? || description.blank?
+
+    self.category = Rule.category_for(user, description, kind)
+  end
 
   def account_and_category_belong_to_user
     errors.add(:account, "is not one of yours") if account && account.user_id != user_id

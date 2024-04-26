@@ -20,4 +20,27 @@ class RuleTest < ActiveSupport::TestCase
     assert_not users(:ayesha).rules.build(pattern: "Imtiaz", category: categories(:ayesha_rent)).valid?
     assert_not users(:ayesha).rules.build(pattern: "al-fatah", category: categories(:bilal_groceries)).valid?
   end
+
+  test "new transactions without a category are filed by rules" do
+    transaction = users(:ayesha).transactions.create!(account: accounts(:ayesha_cash), kind: "expense",
+      amount: "500", occurred_on: Date.current, description: "IMTIAZ express")
+    assert_equal categories(:ayesha_groceries), transaction.category
+  end
+
+  test "rules never override a chosen category" do
+    transaction = users(:ayesha).transactions.create!(account: accounts(:ayesha_cash), kind: "expense",
+      category: categories(:ayesha_rent), amount: "500", occurred_on: Date.current, description: "Imtiaz")
+    assert_equal categories(:ayesha_rent), transaction.category
+  end
+
+  test "imported rows are categorised by rules" do
+    import = users(:ayesha).imports.create!(account: accounts(:ayesha_bank),
+      file: Rack::Test::UploadedFile.new(file_fixture("meezan_statement.csv"), "text/csv"))
+    import.update!(status: "mapped", date_column: "Date", description_column: "Narration",
+      amount_mode: "split", debit_column: "Debit", credit_column: "Credit", date_format: "%d/%m/%Y")
+    import.run!
+
+    assert_equal [ "Groceries", "Salary", nil ],
+      import.transactions.order(:occurred_on).map { |t| t.category&.name }
+  end
 end
