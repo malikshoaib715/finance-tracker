@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   end
   resources :categories
   resources :rules, except: %i[ show new ]
+  resource :rule_application, only: :create, controller: "rules/applications"
   resources :budgets, except: :show
   resource :reports, only: :show
   resource :budget_copy, only: :create, controller: "budgets/copies"

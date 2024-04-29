@@ -10,6 +10,13 @@
   <%= render "form", rule: @rule, categories: @categories %>
 </div>
 
+<% if @uncategorised_count.positive? && @rules.any? %>
+  <div class="mt-4 flex items-center justify-between rounded-xl border border-dashed border-slate-300 p-4 text-sm">
+    <p class="text-slate-600"><%= pluralize(@uncategorised_count, "transaction") %> still have no category.</p>
+    <%= button_to "Apply rules to them", rule_application_path, class: "btn-secondary" %>
+  </div>
+<% end %>
+
 <% if @rules.any? %>
   <ul class="card mt-6 divide-y divide-slate-100 p-0">
     <% @rules.each do |rule| %>

@@ -21,6 +21,14 @@ class Rule < ApplicationRecord
       .find { |rule| rule.category.kind == kind.to_s && rule.matches?(description) }&.category
   end
 
+  # Categorise the user's existing uncategorised transactions. Returns how many changed.
+  def self.apply_to_uncategorised(user)
+    user.transactions.where(category_id: nil).find_each.count do |transaction|
+      category = category_for(user, transaction.description, transaction.kind)
+      category && transaction.update_columns(category_id: category.id, updated_at: Time.current)
+    end
+  end
+
   private
 
   def category_belongs_to_user

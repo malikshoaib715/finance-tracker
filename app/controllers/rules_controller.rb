@@ -5,6 +5,7 @@ class RulesController < ApplicationController
   def index
     @rules = current_user.rules.includes(:category).order(:pattern)
     @rule = current_user.rules.build
+    @uncategorised_count = current_user.transactions.where(category_id: nil).count
   end
 
   def create
@@ -14,6 +15,7 @@ class RulesController < ApplicationController
       redirect_to rules_path, notice: "Rule added."
     else
       @rules = current_user.rules.includes(:category).order(:pattern)
+      @uncategorised_count = current_user.transactions.where(category_id: nil).count
       render :index, status: :unprocessable_entity
     end
   end

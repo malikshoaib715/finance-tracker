@@ -26,4 +26,13 @@ class RulesControllerTest < ActionDispatch::IntegrationTest
     post rules_url, params: { rule: { pattern: "x", category_id: categories(:ayesha_rent).id } }
     assert_response :unprocessable_entity
   end
+
+  test "applies rules to existing uncategorised transactions" do
+    transactions(:groceries).update_columns(category_id: nil)
+
+    post rule_application_url
+    assert_redirected_to rules_url
+    assert_equal "Categorised 1 transaction.", flash[:notice]
+    assert_equal categories(:ayesha_groceries), transactions(:groceries).reload.category
+  end
 end
