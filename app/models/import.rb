@@ -49,10 +49,12 @@ class Import < ApplicationRecord
     raise ArgumentError, "Import ##{id} isn't ready to run" unless mapped?
 
     importable, skipped = rows.partition(&:importable?)
+    matcher = Rule::Matcher.new(user)
     Import.transaction do
       importable.each do |row|
         transactions.create!(user: user, account: account, kind: row.kind, amount_cents: row.amount_cents,
-                             occurred_on: row.occurred_on, description: row.description)
+                             occurred_on: row.occurred_on, description: row.description,
+                             category: matcher.category_for(row.description, row.kind))
       end
       update!(status: "completed", imported_count: importable.size, skipped_count: skipped.size, completed_at: Time.current)
     end

@@ -43,4 +43,13 @@ class RuleTest < ActiveSupport::TestCase
     assert_equal [ "Groceries", "Salary", nil ],
       import.transactions.order(:occurred_on).map { |t| t.category&.name }
   end
+
+  test "the matcher loads rules once for many descriptions" do
+    user = users(:ayesha)
+    queries = count_queries do
+      matcher = Rule::Matcher.new(user)
+      100.times { matcher.category_for("IMTIAZ #{_1}", :expense) }
+    end
+    assert_operator queries, :<=, 2
+  end
 end

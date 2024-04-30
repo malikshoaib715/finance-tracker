@@ -15,16 +15,27 @@ class Rule < ApplicationRecord
     description.to_s.downcase.include?(pattern.downcase)
   end
 
-  # The most specific (longest) matching rule's category for +description+ and +kind+.
+  # Loads a user's rules once and matches many descriptions against them.
+  class Matcher
+    def initialize(user)
+      @rules = user.rules.includes(:category).longest_first.to_a
+    end
+
+    # The most specific (longest) matching rule's category for +description+ and +kind+.
+    def category_for(description, kind)
+      @rules.find { |rule| rule.category.kind == kind.to_s && rule.matches?(description) }&.category
+    end
+  end
+
   def self.category_for(user, description, kind)
-    user.rules.includes(:category).longest_first
-      .find { |rule| rule.category.kind == kind.to_s && rule.matches?(description) }&.category
+    Matcher.new(user).category_for(description, kind)
   end
 
   # Categorise the user's existing uncategorised transactions. Returns how many changed.
   def self.apply_to_uncategorised(user)
+    matcher = Matcher.new(user)
     user.transactions.where(category_id: nil).find_each.count do |transaction|
-      category = category_for(user, transaction.description, transaction.kind)
+      category = matcher.category_for(transaction.description, transaction.kind)
       category && transaction.update_columns(category_id: category.id, updated_at: Time.current)
     end
   end
