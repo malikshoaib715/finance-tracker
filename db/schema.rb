@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_24_164153) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_02_171447) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -94,6 +94,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_164153) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_imports_on_account_id"
     t.index ["user_id"], name: "index_imports_on_user_id"
+  end
+
+  create_table "recurring_transactions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "account_id", null: false
+    t.bigint "category_id"
+    t.string "kind", default: "expense", null: false
+    t.bigint "amount_cents", null: false
+    t.string "description", null: false
+    t.string "frequency", default: "monthly", null: false
+    t.date "next_on", null: false
+    t.date "ends_on"
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_recurring_transactions_on_account_id"
+    t.index ["active", "next_on"], name: "index_recurring_transactions_on_active_and_next_on"
+    t.index ["category_id"], name: "index_recurring_transactions_on_category_id"
+    t.index ["user_id"], name: "index_recurring_transactions_on_user_id"
+    t.check_constraint "amount_cents > 0", name: "recurring_transactions_amount_positive"
   end
 
   create_table "rules", force: :cascade do |t|
@@ -191,6 +211,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_24_164153) do
   add_foreign_key "categories", "users"
   add_foreign_key "imports", "accounts"
   add_foreign_key "imports", "users"
+  add_foreign_key "recurring_transactions", "accounts"
+  add_foreign_key "recurring_transactions", "categories", on_delete: :nullify
+  add_foreign_key "recurring_transactions", "users"
   add_foreign_key "rules", "categories", on_delete: :cascade
   add_foreign_key "rules", "users"
   add_foreign_key "taggings", "tags", on_delete: :cascade

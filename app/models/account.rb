@@ -2,6 +2,7 @@ class Account < ApplicationRecord
   belongs_to :user
   has_many :transactions, dependent: :restrict_with_error
   has_many :imports, dependent: :delete_all
+  has_many :recurring_transactions, dependent: :delete_all
   has_many :outgoing_transfers, class_name: "Transfer", foreign_key: :from_account_id, dependent: :restrict_with_error
   has_many :incoming_transfers, class_name: "Transfer", foreign_key: :to_account_id, dependent: :restrict_with_error
 
