@@ -14,7 +14,7 @@ class RecurringTransaction < ApplicationRecord
   validates :description, presence: true, length: { maximum: 120 }
   validates :amount_cents, numericality: { only_integer: true, greater_than: 0 }
   validates :next_on, presence: true
-  validate :ends_after_next
+  validate :ends_after_next, if: :active?
   validate :belongs_to_same_user
 
   scope :active, -> { where(active: true) }
