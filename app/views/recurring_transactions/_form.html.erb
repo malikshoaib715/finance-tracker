@@ -1,0 +1,71 @@
+<%= form_with model: item, class: "space-y-5", data: { controller: "category-filter" } do |f| %>
+  <%= render "shared/form_errors", record: item %>
+
+  <div class="grid grid-cols-2 gap-2 rounded-lg bg-slate-100 p-1 text-sm font-medium">
+    <% RecurringTransaction.kinds.each_key do |kind| %>
+      <label class="cursor-pointer">
+        <%= f.radio_button :kind, kind, class: "peer sr-only",
+              data: { category_filter_target: "kind", action: "category-filter#filter" } %>
+        <span class="block rounded-md py-2 text-center text-slate-600 peer-checked:bg-white peer-checked:text-slate-900 peer-checked:shadow-sm">
+          <%= kind.humanize %>
+        </span>
+      </label>
+    <% end %>
+  </div>
+
+  <div>
+    <%= f.label :description, class: "form-label" %>
+    <%= f.text_field :description, placeholder: "e.g. Flat rent", class: "form-input" %>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <%= f.label :amount, class: "form-label" %>
+      <%= f.number_field :amount, step: "0.01", min: "0.01", value: item.amount&.round(2), class: "form-input" %>
+    </div>
+    <div>
+      <%= f.label :frequency, "Repeats", class: "form-label" %>
+      <%= f.select :frequency, RecurringTransaction.frequencies.keys.map { |k| [ k.humanize, k ] }, {}, class: "form-input" %>
+    </div>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <%= f.label :next_on, "Next date", class: "form-label" %>
+      <%= f.date_field :next_on, class: "form-input" %>
+    </div>
+    <div>
+      <%= f.label :ends_on, "Ends on (optional)", class: "form-label" %>
+      <%= f.date_field :ends_on, class: "form-input" %>
+    </div>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <%= f.label :account_id, "Account", class: "form-label" %>
+      <%= f.collection_select :account_id, accounts, :id, :name, {}, class: "form-input" %>
+    </div>
+    <div>
+      <%= f.label :category_id, "Category", class: "form-label" %>
+      <%= f.select :category_id, {}, { include_blank: "Uncategorised" }, class: "form-input",
+            data: { category_filter_target: "select" } do %>
+        <% categories.group_by(&:kind).each do |kind, list| %>
+          <optgroup label="<%= kind.pluralize.humanize %>" data-kind="<%= kind %>">
+            <%= options_from_collection_for_select(list, :id, :name, item.category_id) %>
+          </optgroup>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if item.persisted? %>
+    <label class="flex items-center gap-2 text-sm text-slate-700">
+      <%= f.check_box :active, class: "form-checkbox" %> Active
+    </label>
+  <% end %>
+
+  <div class="flex justify-end gap-3">
+    <%= link_to "Cancel", recurring_transactions_path, class: "btn-secondary" %>
+    <%= f.submit "Save", class: "btn-primary" %>
+  </div>
+<% end %>

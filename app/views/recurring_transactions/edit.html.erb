@@ -1,0 +1,13 @@
+<% content_for :title, "Edit #{@item.description}" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit recurring transaction</h1>
+  <div class="card mt-6">
+    <%= render "form", item: @item, accounts: @accounts, categories: @categories %>
+  </div>
+  <div class="mt-6 flex justify-end">
+    <%= button_to "Delete", recurring_transaction_path(@item), method: :delete,
+          form: { data: { turbo_confirm: "Stop repeating #{@item.description}? Past transactions stay." } },
+          class: "text-sm font-medium text-rose-600 hover:text-rose-500" %>
+  </div>
+</div>

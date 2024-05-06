@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     resources :receipts, only: :destroy, module: :transactions
   end
   resources :transfers, except: %i[ index show ]
+  resources :recurring_transactions, except: :show, path: "recurring"
   resources :imports, only: %i[ index new create edit update show ] do
     post :run, on: :member
     post :undo, on: :member

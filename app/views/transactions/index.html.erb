@@ -3,6 +3,7 @@
 <div class="flex items-center justify-between">
   <h1 class="text-2xl font-bold tracking-tight text-slate-900">Transactions</h1>
   <div class="flex gap-3">
+    <%= link_to "Recurring", recurring_transactions_path, class: "btn-secondary" %>
     <%= link_to "Import", new_import_path, class: "btn-secondary" %>
     <%= link_to "Export CSV", export_transactions_path(filter: @filter.attributes.compact), class: "btn-secondary", data: { turbo: false } %>
     <%= link_to "Transfer", new_transfer_path, class: "btn-secondary" %>
