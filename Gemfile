@@ -26,6 +26,9 @@ gem "stimulus-rails"
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
 gem "tailwindcss-rails"
 
+# Postgres-backed Active Job backend with cron [https://github.com/bensheldon/good_job]
+gem "good_job", "~> 3.28"
+
 # Charts [https://chartkick.com] and time-series grouping [https://github.com/ankane/groupdate]
 gem "chartkick"
 gem "groupdate"
