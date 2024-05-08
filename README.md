@@ -29,6 +29,8 @@ Then open http://localhost:3000 and sign in with the demo account created by the
 `demo@example.com` / `password123`.
 
 Emails (confirmation, password reset) open in the browser at http://localhost:3000/letter_opener.
+Background jobs run on [GoodJob](https://github.com/bensheldon/good_job) inside the web process; its dashboard is at
+http://localhost:3000/good_job in development.
 
 ## Running the tests
 
@@ -44,4 +46,4 @@ bin/rails test
 - [ ] Monthly budgets with overspend alerts
 - [ ] Dashboard charts and reports
 - [ ] CSV import from bank statements
-- [ ] Recurring transactions
+- [x] Recurring transactions
