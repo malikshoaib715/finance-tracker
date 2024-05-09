@@ -12,6 +12,7 @@ class DashboardController < ApplicationController
     @accounts = current_user.accounts.active.alphabetical.with_balances
     @budgets = current_user.budgets.for_month(@month.first).with_spending.includes(:category)
       .sort_by { |budget| -budget.ratio }.first(4)
+    @upcoming = current_user.recurring_transactions.upcoming.includes(:account).limit(5)
     @recent_transactions = current_user.transactions.includes(:account, :category, :tags).recent_first.limit(5)
   end
 end

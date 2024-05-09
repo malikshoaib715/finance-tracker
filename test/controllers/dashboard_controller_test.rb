@@ -40,4 +40,11 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_match "Groceries", response.body
     assert_match "Chartkick", response.body
   end
+
+  test "lists recurring items due in the next two weeks" do
+    sign_in users(:ayesha)
+    get dashboard_url
+    assert_select "##{ActionView::RecordIdentifier.dom_id(recurring_transactions(:rent), :upcoming)}", text: /Today/
+    assert_select "##{ActionView::RecordIdentifier.dom_id(recurring_transactions(:netflix), :upcoming)}", count: 0
+  end
 end

@@ -53,6 +53,28 @@
   </section>
 
   <section class="space-y-6">
+    <% if @upcoming.any? %>
+      <div>
+        <div class="mb-2 flex items-center justify-between">
+          <h2 class="font-semibold text-slate-900">Coming up</h2>
+          <%= link_to "Recurring", recurring_transactions_path, class: "link text-sm" %>
+        </div>
+        <ul class="card divide-y divide-slate-100 p-0">
+          <% @upcoming.each do |item| %>
+            <li id="<%= dom_id(item, :upcoming) %>" class="flex items-center justify-between px-4 py-3 text-sm">
+              <span>
+                <span class="text-slate-700"><%= item.description %></span>
+                <span class="block text-xs text-slate-500">
+                  <%= item.next_on == Date.current ? "Today" : l(item.next_on, format: "%a %-d %b") %>
+                </span>
+              </span>
+              <%= money_tag(item.signed_amount_cents, item.account.currency, class: "font-medium") %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
     <div>
       <div class="mb-2 flex items-center justify-between">
         <h2 class="font-semibold text-slate-900">Budgets</h2>
