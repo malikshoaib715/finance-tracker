@@ -8,6 +8,11 @@ class RecurringTransactionsController < ApplicationController
 
   def new
     @item = current_user.recurring_transactions.build(next_on: Date.current, account: @accounts.first)
+
+    if (source = current_user.transactions.find_by(id: params[:from]))
+      @item.assign_attributes(source.slice(:kind, :amount_cents, :description, :account_id, :category_id))
+      @item.next_on = source.occurred_on.next_month
+    end
   end
 
   def create

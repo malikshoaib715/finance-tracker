@@ -26,4 +26,10 @@ class RecurringTransactionsControllerTest < ActionDispatch::IntegrationTest
       delete recurring_transaction_url(item)
     end
   end
+
+  test "pre-fills from an existing transaction, a month later" do
+    get new_recurring_transaction_url(from: transactions(:rent))
+    assert_select "input#recurring_transaction_description[value=?]", "Flat rent"
+    assert_select "input#recurring_transaction_next_on[value=?]", transactions(:rent).occurred_on.next_month.iso8601
+  end
 end

@@ -31,7 +31,10 @@
   <% end %>
 
   <div class="mt-6 flex items-center justify-between">
-    <%= link_to "Repeat today", new_transaction_path(repeat: @transaction), class: "link text-sm" %>
+    <div class="flex gap-4">
+      <%= link_to "Repeat today", new_transaction_path(repeat: @transaction), class: "link text-sm" %>
+      <%= link_to "Make recurring", new_recurring_transaction_path(from: @transaction), class: "link text-sm" %>
+    </div>
     <%= button_to "Delete transaction", transaction_path(@transaction), method: :delete,
           form: { data: { turbo_confirm: "Delete this transaction?" } },
           class: "text-sm font-medium text-rose-600 hover:text-rose-500" %>
