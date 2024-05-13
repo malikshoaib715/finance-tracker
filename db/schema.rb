@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_07_134235) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_13_042115) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -78,6 +78,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_07_134235) do
     t.datetime "updated_at", null: false
     t.index ["user_id", "kind", "name"], name: "index_categories_on_user_id_and_kind_and_name", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "goals", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "account_id"
+    t.string "name", null: false
+    t.bigint "target_cents", null: false
+    t.bigint "saved_cents", default: 0, null: false
+    t.date "target_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_goals_on_account_id"
+    t.index ["user_id"], name: "index_goals_on_user_id"
+    t.check_constraint "target_cents > 0", name: "goals_target_positive"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -289,6 +303,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_07_134235) do
   add_foreign_key "budgets", "categories", on_delete: :cascade
   add_foreign_key "budgets", "users"
   add_foreign_key "categories", "users"
+  add_foreign_key "goals", "accounts", on_delete: :nullify
+  add_foreign_key "goals", "users"
   add_foreign_key "imports", "accounts"
   add_foreign_key "imports", "users"
   add_foreign_key "recurring_transactions", "accounts"

@@ -1,0 +1,12 @@
+umrah:
+  user: ayesha
+  name: Umrah
+  target_cents: 60000000
+  saved_cents: 15000000
+  target_on: <%= Date.current.next_month(10).end_of_month %>
+
+emergency_fund:
+  user: ayesha
+  account: ayesha_cash
+  name: Emergency fund
+  target_cents: 2000000
