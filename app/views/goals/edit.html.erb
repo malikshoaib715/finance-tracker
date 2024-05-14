@@ -1,0 +1,11 @@
+<% content_for :title, "Edit #{@goal.name}" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit goal</h1>
+  <div class="card mt-6"><%= render "form", goal: @goal, accounts: @accounts %></div>
+  <div class="mt-6 flex justify-end">
+    <%= button_to "Delete goal", goal_path(@goal), method: :delete,
+          form: { data: { turbo_confirm: "Delete “#{@goal.name}”?" } },
+          class: "text-sm font-medium text-rose-600 hover:text-rose-500" %>
+  </div>
+</div>
