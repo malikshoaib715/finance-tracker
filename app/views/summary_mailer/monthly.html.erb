@@ -1,0 +1,33 @@
+<h1 style="font-size:20px;margin:0 0 4px">Hi <%= @user.first_name %>,</h1>
+<p style="margin:0 0 20px;color:#475569">Here's how <%= l(@month, format: "%B %Y") %> went.</p>
+
+<table cellpadding="8" style="border-collapse:collapse;width:100%;max-width:480px">
+  <tr><td>Income</td><td style="text-align:right"><strong><%= money(@income_cents, @user.currency) %></strong></td></tr>
+  <tr><td>Spent</td><td style="text-align:right"><strong><%= money(@expense_cents, @user.currency) %></strong></td></tr>
+  <tr style="border-top:1px solid #e2e8f0">
+    <td>Net</td><td style="text-align:right"><strong><%= money(@income_cents - @expense_cents, @user.currency) %></strong></td>
+  </tr>
+</table>
+
+<% if @top_categories.any? %>
+  <h2 style="font-size:16px;margin:24px 0 8px">Where it went</h2>
+  <ul style="padding-left:18px;margin:0">
+    <% @top_categories.each do |row| %>
+      <li><%= row.name %>: <%= money(row.amount_cents, @user.currency) %> (<%= number_to_percentage(row.share * 100, precision: 0) %>)</li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @budgets.any? %>
+  <h2 style="font-size:16px;margin:24px 0 8px">Budgets</h2>
+  <ul style="padding-left:18px;margin:0">
+    <% @budgets.each do |budget| %>
+      <li>
+        <%= budget.category.name %>: <%= money(budget.spent_cents, @user.currency) %> of <%= money(budget.amount_cents, @user.currency) %>
+        <%= "— over budget" if budget.status == :over %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<p style="margin-top:24px"><%= link_to "Open your reports", reports_url(month: @month.strftime("%Y-%m")) %></p>

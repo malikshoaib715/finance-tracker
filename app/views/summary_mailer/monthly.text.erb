@@ -1,0 +1,16 @@
+Hi <%= @user.first_name %>,
+
+Here's how <%= l(@month, format: "%B %Y") %> went.
+
+Income: <%= money(@income_cents, @user.currency) %>
+Spent:  <%= money(@expense_cents, @user.currency) %>
+Net:    <%= money(@income_cents - @expense_cents, @user.currency) %>
+<% if @top_categories.any? %>
+
+Where it went:
+<% @top_categories.each do |row| %>
+- <%= row.name %>: <%= money(row.amount_cents, @user.currency) %>
+<% end %>
+<% end %>
+
+Open your reports: <%= reports_url(month: @month.strftime("%Y-%m")) %>
