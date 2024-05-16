@@ -21,4 +21,9 @@ class AccountSettingsTest < ActionDispatch::IntegrationTest
     assert_equal "USD", user.currency
     assert_equal "London", user.time_zone
   end
+
+  test "can turn off the monthly summary" do
+    patch user_registration_path, params: { user: { monthly_summary: "0", current_password: "password123" } }
+    assert_not users(:ayesha).reload.monthly_summary?
+  end
 end

@@ -34,6 +34,11 @@
         </div>
       </div>
 
+      <label class="flex items-center gap-2 text-sm text-slate-700">
+        <%= f.check_box :monthly_summary, class: "form-checkbox" %>
+        Email me a summary of each month on the 1st
+      </label>
+
       <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
         <p class="text-sm text-amber-700">Waiting for confirmation of <%= resource.unconfirmed_email %></p>
       <% end %>
