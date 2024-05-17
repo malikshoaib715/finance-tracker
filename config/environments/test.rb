@@ -62,4 +62,7 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Throttling is exercised explicitly in its own test.
+  config.after_initialize { Rack::Attack.enabled = false }
 end

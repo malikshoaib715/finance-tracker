@@ -33,6 +33,9 @@ gem "good_job", "~> 3.28"
 gem "chartkick"
 gem "groupdate"
 
+# Throttle abusive requests [https://github.com/rack/rack-attack]
+gem "rack-attack"
+
 # CSV leaves the default gems in Ruby 3.4; declare it explicitly
 gem "csv"
 
