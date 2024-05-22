@@ -1,0 +1,7 @@
+<p>Hi <%= @resource.name %>,</p>
+
+<p>Your Finance Tracker account was locked after too many unsuccessful sign-in attempts. It unlocks by itself in an hour, or straight away with this link:</p>
+
+<p><%= link_to "Unlock my account", unlock_url(@resource, unlock_token: @token) %></p>
+
+<p>If those attempts weren't you, consider changing your password once you're back in.</p>

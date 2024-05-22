@@ -2,9 +2,9 @@ class User < ApplicationRecord
   CURRENCIES = %w[PKR USD EUR GBP AED SAR].freeze
 
   # Include default devise modules. Others available are:
-  # :lockable, :timeoutable, :trackable and :omniauthable
+  # :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable
+         :recoverable, :rememberable, :validatable, :confirmable, :lockable
 
   # Transactions first: accounts refuse to be destroyed while they still have any.
   has_many :imports, dependent: :delete_all
