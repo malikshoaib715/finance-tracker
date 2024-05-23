@@ -1,0 +1,29 @@
+<% content_for :title, "Reconcile #{@account.name}" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Reconcile <%= @account.name %></h1>
+  <p class="mt-1 text-sm text-slate-600">
+    Tracked balance: <strong><%= money(@account.balance_cents, @account.currency) %></strong>.
+    Enter what your bank or wallet shows and we'll record the difference as an adjustment.
+  </p>
+
+  <div class="card mt-6">
+    <%= form_with model: @reconciliation, scope: :reconciliation, url: account_reconciliation_path(@account), class: "space-y-5" do |f| %>
+      <%= render "shared/form_errors", record: @reconciliation %>
+      <div class="grid gap-5 sm:grid-cols-2">
+        <div>
+          <%= f.label :actual_balance, "Actual balance", class: "form-label" %>
+          <%= f.number_field :actual_balance, step: "0.01", value: @reconciliation.actual_balance&.to_d&.round(2), class: "form-input" %>
+        </div>
+        <div>
+          <%= f.label :on, "As of", class: "form-label" %>
+          <%= f.date_field :on, value: Date.current, class: "form-input" %>
+        </div>
+      </div>
+      <div class="flex justify-end gap-3">
+        <%= link_to "Cancel", account_path(@account), class: "btn-secondary" %>
+        <%= f.submit "Reconcile", class: "btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

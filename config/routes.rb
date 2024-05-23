@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   resource :budget_copy, only: :create, controller: "budgets/copies"
   resources :accounts do
     resource :archive, only: %i[ create destroy ], module: :accounts
+    resource :reconciliation, only: %i[ new create ], module: :accounts
   end
 
   authenticated :user do
