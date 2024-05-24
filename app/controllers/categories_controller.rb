@@ -11,7 +11,7 @@ class CategoriesController < ApplicationController
     range = (Date.current.beginning_of_month << 5)..Date.current.end_of_month
     @trend = @category.transactions.group_by_month(:occurred_on, range: range, format: "%b %Y")
       .sum(:amount_cents).transform_values { |cents| cents / 100.0 }
-    @transactions = @category.transactions.includes(:account, :category, :tags).recent_first.limit(20)
+    @transactions = @category.transactions.includes(:account, :tags, :receipts_attachments).recent_first.limit(20)
   end
 
   def new

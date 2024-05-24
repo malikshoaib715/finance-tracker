@@ -3,7 +3,7 @@ class RecurringTransactionsController < ApplicationController
   before_action :load_form_options, only: %i[ new create edit update ]
 
   def index
-    @items = current_user.recurring_transactions.includes(:account, :category).order(active: :desc, next_on: :asc)
+    @items = current_user.recurring_transactions.includes(:account).order(active: :desc, next_on: :asc)
   end
 
   def new

@@ -65,4 +65,9 @@ Rails.application.configure do
 
   # Throttling is exercised explicitly in its own test.
   config.after_initialize { Rack::Attack.enabled = false }
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.raise = true # an N+1 in a request fails the test
+  end
 end
