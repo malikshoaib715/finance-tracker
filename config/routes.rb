@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resource :dashboard, only: :show, controller: "dashboard"
+  resource :data_export, only: :show, controller: "users/data_exports"
   resources :transactions, except: :show do
     get :export, on: :collection, defaults: { format: :csv }
     resources :receipts, only: :destroy, module: :transactions
