@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_22_141156) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_29_071231) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -252,11 +252,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_22_141156) do
     t.datetime "updated_at", null: false
     t.bigint "import_id"
     t.index ["account_id", "occurred_on"], name: "index_transactions_on_account_id_and_occurred_on"
-    t.index ["account_id"], name: "index_transactions_on_account_id"
-    t.index ["category_id"], name: "index_transactions_on_category_id"
+    t.index ["category_id", "occurred_on"], name: "index_transactions_on_category_id_and_occurred_on"
     t.index ["import_id"], name: "index_transactions_on_import_id"
     t.index ["user_id", "occurred_on"], name: "index_transactions_on_user_id_and_occurred_on"
-    t.index ["user_id"], name: "index_transactions_on_user_id"
     t.check_constraint "amount_cents > 0", name: "transactions_amount_positive"
   end
 
