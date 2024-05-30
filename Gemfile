@@ -33,6 +33,9 @@ gem "good_job", "~> 3.28"
 gem "chartkick"
 gem "groupdate"
 
+# Catch unsafe migrations in development [https://github.com/ankane/strong_migrations]
+gem "strong_migrations"
+
 # Throttle abusive requests [https://github.com/rack/rack-attack]
 gem "rack-attack"
 
