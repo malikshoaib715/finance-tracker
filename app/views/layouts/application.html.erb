@@ -11,7 +11,11 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="h-full flex flex-col text-slate-800 antialiased">
+  <body class="h-full flex flex-col text-slate-800 antialiased"
+        <% if user_signed_in? %>
+          data-controller="shortcuts" data-action="keydown@window->shortcuts#handle"
+          data-shortcuts-new-transaction-url-value="<%= new_transaction_path %>"
+        <% end %>>
     <%= render "shared/navbar" %>
     <%= render "shared/confirmation_banner" %>
     <%= render "shared/flash" %>
