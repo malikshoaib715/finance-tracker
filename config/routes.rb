@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get :export, on: :collection, defaults: { format: :csv }
     resources :receipts, only: :destroy, module: :transactions
   end
+  resource :quick_add, only: :create, controller: "transactions/quick_adds"
   resources :transfers, except: %i[ index show ]
   resources :recurring_transactions, except: :show, path: "recurring"
   resources :imports, only: %i[ index new create edit update show ] do
