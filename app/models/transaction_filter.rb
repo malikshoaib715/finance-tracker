@@ -40,7 +40,10 @@ class TransactionFilter
     scope = scope.where(category_id: category_id) if category_id
     scope = scope.where(id: Tagging.where(tag_id: tag_id).select(:transaction_id)) if tag_id
     scope = scope.where(kind: kind) if kind.in?(Transaction.kinds.keys)
-    scope = scope.where("description ILIKE ?", "%#{Transaction.sanitize_sql_like(q.strip)}%") if q.present?
+    if q.present?
+      term = "%#{Transaction.sanitize_sql_like(q.strip)}%"
+      scope = scope.where("transactions.description ILIKE :term OR transactions.notes ILIKE :term", term:)
+    end
     within_dates(scope)
   end
 

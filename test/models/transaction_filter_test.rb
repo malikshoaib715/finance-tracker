@@ -61,4 +61,9 @@ class TransactionFilterTest < ActiveSupport::TestCase
     assert_equal [ transactions(:groceries) ], f.transactions.to_a
     assert_empty f.transfers
   end
+
+  test "search also looks in notes" do
+    transactions(:rent).update!(notes: "Paid to landlord via IBFT")
+    assert_equal [ transactions(:rent) ], filter(q: "landlord").transactions.to_a
+  end
 end
