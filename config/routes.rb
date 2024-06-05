@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :receipts, only: :destroy, module: :transactions
   end
   resource :quick_add, only: :create, controller: "transactions/quick_adds"
+  resource :transactions_bulk, only: %i[ update destroy ], controller: "transactions/bulks"
   resources :transfers, except: %i[ index show ]
   resources :recurring_transactions, except: :show, path: "recurring"
   resources :imports, only: %i[ index new create edit update show ] do
