@@ -1,5 +1,12 @@
-<li id="<%= dom_id(transaction) %>">
-  <%= link_to edit_transaction_path(transaction), class: "flex items-center gap-4 px-4 py-3 hover:bg-slate-50" do %>
+<li id="<%= dom_id(transaction) %>" class="flex items-center">
+  <% if local_assigns[:selectable] %>
+    <label class="pl-4">
+      <span class="sr-only">Select <%= transaction.description %></span>
+      <input type="checkbox" name="transaction_ids[]" value="<%= transaction.id %>" form="bulk-actions"
+             class="form-checkbox" data-bulk-select-target="checkbox" data-action="bulk-select#update">
+    </label>
+  <% end %>
+  <%= link_to edit_transaction_path(transaction), class: "flex min-w-0 flex-1 items-center gap-4 px-4 py-3 hover:bg-slate-50" do %>
     <div class="min-w-0 flex-1">
       <p class="truncate text-sm font-medium text-slate-900">
         <%= transaction.description %>

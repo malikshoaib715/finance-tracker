@@ -30,4 +30,21 @@ class TransactionsTest < ApplicationSystemTestCase
     assert_text "Careem rides"
     assert_text "-Rs 1,250.00"
   end
+
+  test "bulk-setting a category" do
+    visit transactions_path
+    assert_no_selector "#bulk-actions"
+
+    check "Select Flat rent"
+    check "Select Imtiaz weekly shop"
+    assert_text "2 selected"
+
+    within("#bulk-actions") do
+      select "Groceries", from: "category_id"
+      click_on "Set category"
+    end
+
+    assert_text "Updated 2 transactions."
+    assert_equal categories(:ayesha_groceries), transactions(:rent).reload.category
+  end
 end

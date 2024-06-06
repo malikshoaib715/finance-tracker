@@ -16,14 +16,28 @@
 <%= render "totals", totals: @totals %>
 
 <% if @entries.any? %>
-  <div class="mt-6 space-y-6">
+  <div class="mt-6 space-y-6" data-controller="bulk-select">
+    <%= form_with url: transactions_bulk_path, method: :patch, id: "bulk-actions",
+          class: "hidden sticky top-2 z-10 flex flex-wrap items-center gap-3 rounded-xl bg-slate-900 px-4 py-3 text-sm text-white shadow-lg",
+          data: { bulk_select_target: "bar" } do |f| %>
+      <span data-bulk-select-target="count" class="font-medium"></span>
+      <%= select_tag :category_id, options_from_collection_for_select(@categories, :id, :name),
+            include_blank: "No category", class: "rounded-lg border-0 py-1.5 text-sm text-slate-900" %>
+      <%= f.submit "Set category", class: "rounded-lg bg-white px-3 py-1.5 font-semibold text-slate-900 hover:bg-slate-100" %>
+      <%= f.button "Delete", formmethod: :post, name: "_method", value: "delete",
+            data: { turbo_confirm: "Delete the selected transactions?" },
+            class: "rounded-lg bg-rose-600 px-3 py-1.5 font-semibold hover:bg-rose-500" %>
+      <button type="button" data-action="bulk-select#clear" class="ml-auto text-slate-300 hover:text-white">Clear</button>
+    <% end %>
     <% @entries.group_by(&:occurred_on).each do |date, entries| %>
       <section>
         <h2 class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
           <%= date == Date.current ? "Today" : l(date, format: :long) %>
         </h2>
         <ul class="card divide-y divide-slate-100 p-0">
-          <%= render entries %>
+          <% entries.each do |entry| %>
+            <%= entry.is_a?(Transaction) ? render(entry, selectable: true) : render(entry) %>
+          <% end %>
         </ul>
       </section>
     <% end %>
