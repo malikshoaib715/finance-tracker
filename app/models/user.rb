@@ -24,6 +24,9 @@ class User < ApplicationRecord
 
   validates :name, presence: true, length: { maximum: 80 }
   validates :currency, inclusion: { in: CURRENCIES }
+  enum :number_format, { international: "international", south_asian: "south_asian" },
+       default: :international, validate: true, prefix: :numbers
+
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
 
   def first_name
