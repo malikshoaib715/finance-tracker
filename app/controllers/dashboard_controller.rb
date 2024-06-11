@@ -1,5 +1,6 @@
 class DashboardController < ApplicationController
   def show
+    @onboarding = User::Onboarding.new(current_user)
     @month = Date.current.all_month
     month_transactions = current_user.transactions.where(occurred_on: @month)
 

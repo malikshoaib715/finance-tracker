@@ -11,6 +11,8 @@
   </div>
 </div>
 
+<%= render "onboarding", onboarding: @onboarding unless @onboarding.complete? %>
+
 <% if @accounts.any? %>
   <%= form_with scope: :quick_add, url: quick_add_path, class: "card mt-6 flex flex-wrap items-end gap-3 p-4" do |f| %>
     <div class="w-28">

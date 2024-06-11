@@ -47,4 +47,11 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_select "##{ActionView::RecordIdentifier.dom_id(recurring_transactions(:rent), :upcoming)}", text: /Today/
     assert_select "##{ActionView::RecordIdentifier.dom_id(recurring_transactions(:netflix), :upcoming)}", count: 0
   end
+
+  test "shows the getting started checklist until it's complete" do
+    sign_in users(:ayesha)
+    get dashboard_url
+    assert_select "h2", "Getting started"
+    assert_select "a", "Import a bank statement"
+  end
 end

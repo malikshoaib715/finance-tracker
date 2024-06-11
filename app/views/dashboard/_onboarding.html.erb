@@ -1,0 +1,20 @@
+<section class="card mt-6 border-l-4 border-emerald-500">
+  <div class="flex items-center justify-between">
+    <h2 class="font-semibold text-slate-900">Getting started</h2>
+    <span class="text-sm text-slate-500"><%= onboarding.done_count %> of <%= onboarding.steps.size %> done</span>
+  </div>
+  <ol class="mt-4 grid gap-2 sm:grid-cols-2">
+    <% onboarding.steps.each do |step| %>
+      <li class="flex items-center gap-3 text-sm">
+        <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full <%= step.done ? "bg-emerald-500 text-white" : "ring-1 ring-slate-300" %>">
+          <%= "✓" if step.done %>
+        </span>
+        <% if step.done %>
+          <span class="text-slate-400 line-through"><%= step.title %></span>
+        <% else %>
+          <%= link_to step.title, public_send(step.path_helper), class: "link" %>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+</section>
