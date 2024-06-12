@@ -14,4 +14,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "button", "Sign out"
     assert_select "a", "Account settings"
   end
+
+  test "links the web app manifest" do
+    get root_url
+    assert_select "link[rel=manifest][href='/manifest.webmanifest']"
+  end
 end
