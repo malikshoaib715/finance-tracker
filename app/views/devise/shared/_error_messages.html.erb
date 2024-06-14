@@ -1,5 +1,5 @@
 <% if resource.errors.any? %>
-  <div id="error_explanation" data-turbo-cache="false" class="mb-6 rounded-lg bg-rose-50 p-4 text-sm text-rose-800 ring-1 ring-rose-200">
+  <div id="error_explanation" role="alert" data-turbo-cache="false" class="mb-6 rounded-lg bg-rose-50 p-4 text-sm text-rose-800 ring-1 ring-rose-200">
     <p class="font-medium">
       <%= I18n.t("errors.messages.not_saved",
                  count: resource.errors.count,

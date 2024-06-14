@@ -19,4 +19,10 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_url
     assert_select "link[rel=manifest][href='/manifest.webmanifest']"
   end
+
+  test "has a skip link to the main content" do
+    get root_url
+    assert_select "a[href='#main']", "Skip to content"
+    assert_select "main#main"
+  end
 end

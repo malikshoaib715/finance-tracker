@@ -20,11 +20,14 @@
           data-controller="shortcuts" data-action="keydown@window->shortcuts#handle"
           data-shortcuts-new-transaction-url-value="<%= new_transaction_path %>"
         <% end %>>
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:shadow">
+      Skip to content
+    </a>
     <%= render "shared/navbar" %>
     <%= render "shared/confirmation_banner" %>
     <%= render "shared/flash" %>
 
-    <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    <main id="main" tabindex="-1" class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 py-8 focus:outline-none">
       <%= yield %>
     </main>
 

@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* Keyboard users always see where they are. */
+  a:focus-visible, button:focus-visible, summary:focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-emerald-600 rounded;
+  }
+}
+
 @layer components {
   .card {
     @apply rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200;
