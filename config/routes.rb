@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   resources :accounts do
     resource :archive, only: %i[ create destroy ], module: :accounts
     resource :reconciliation, only: %i[ new create ], module: :accounts
+    resource :position, only: :update, module: :accounts
   end
 
   authenticated :user do

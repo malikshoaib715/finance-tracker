@@ -51,4 +51,15 @@ class AccountTest < ActiveSupport::TestCase
     queries = count_queries { user.accounts.with_balances.map(&:balance_cents) }
     assert_equal 1, queries
   end
+
+  test "new accounts go to the end and can be moved" do
+    account = users(:ayesha).accounts.create!(name: "JazzCash", kind: "wallet", currency: "PKR")
+    assert_equal 4, account.position
+
+    account.move(-1)
+    assert_equal [ "HBL Credit Card", "Meezan Current", "JazzCash", "Wallet cash" ], users(:ayesha).accounts.ordered.map(&:name)
+
+    accounts(:ayesha_card).reload.move(-1) # already first
+    assert_equal "HBL Credit Card", users(:ayesha).accounts.ordered.first.name
+  end
 end

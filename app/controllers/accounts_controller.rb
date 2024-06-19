@@ -2,7 +2,7 @@ class AccountsController < ApplicationController
   before_action :set_account, only: %i[ show edit update destroy ]
 
   def index
-    @accounts = current_user.accounts.active.alphabetical.with_balances
+    @accounts = current_user.accounts.active.ordered.with_balances
     @archived_accounts = current_user.accounts.archived.alphabetical
   end
 

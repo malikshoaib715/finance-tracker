@@ -18,6 +18,24 @@ class Account < ApplicationRecord
   scope :active, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
   scope :alphabetical, -> { order(:name) }
+  scope :ordered, -> { order(:position, :name) }
+
+  before_create { self.position = (user.accounts.maximum(:position) || 0) + 1 }
+
+  # Swap places with the neighbour above (-1) or below (+1).
+  def move(direction)
+    siblings = user.accounts.active.ordered.to_a
+    index = siblings.index(self)
+    neighbour = siblings[index + direction] if index && (index + direction).between?(0, siblings.size - 1)
+    return unless neighbour
+
+    transaction do
+      mine, theirs = position, neighbour.position
+      mine, theirs = index + 1, index + 1 + direction if mine == theirs
+      update!(position: theirs)
+      neighbour.update!(position: mine)
+    end
+  end
 
   # Loads each account's balance in the same query (one correlated subquery per
   # movement type) so lists don't run four SUMs per account.

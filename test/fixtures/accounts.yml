@@ -1,6 +1,7 @@
 ayesha_bank:
   user: ayesha
   name: Meezan Current
+  position: 2
   kind: bank
   currency: PKR
   opening_balance_cents: 15000000
@@ -8,6 +9,7 @@ ayesha_bank:
 ayesha_cash:
   user: ayesha
   name: Wallet cash
+  position: 3
   kind: cash
   currency: PKR
   opening_balance_cents: 850000
@@ -15,6 +17,7 @@ ayesha_cash:
 ayesha_card:
   user: ayesha
   name: HBL Credit Card
+  position: 1
   kind: credit_card
   currency: PKR
   opening_balance_cents: -2500000
