@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   resource :rule_application, only: :create, controller: "rules/applications"
   resources :budgets, except: :show
   resources :goals, except: :show
+  resources :exchange_rates, only: %i[ index create destroy ]
   resource :reports, only: :show
   resource :budget_copy, only: :create, controller: "budgets/copies"
   resources :accounts do

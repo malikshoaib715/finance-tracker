@@ -1,0 +1,41 @@
+<% content_for :title, "Exchange rates" %>
+
+<div class="mx-auto w-full max-w-2xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Exchange rates</h1>
+  <p class="mt-1 text-sm text-slate-600">
+    Used to include accounts in other currencies in your net worth and totals.
+    Rates are what you set — update them whenever you like.
+  </p>
+
+  <% if @missing.any? %>
+    <p class="mt-4 rounded-lg bg-amber-50 p-3 text-sm text-amber-800 ring-1 ring-amber-200">
+      You have accounts in <%= @missing.to_sentence %> without a rate yet.
+    </p>
+  <% end %>
+
+  <%= form_with model: @rate, class: "card mt-6 flex flex-wrap items-end gap-3" do |f| %>
+    <div>
+      <%= f.label :currency, "1 unit of", class: "form-label" %>
+      <%= f.select :currency, User::CURRENCIES - [ current_user.currency ], {}, class: "form-input" %>
+    </div>
+    <div class="flex-1">
+      <%= f.label :rate, "is worth (#{current_user.currency})", class: "form-label" %>
+      <%= f.number_field :rate, step: "0.000001", min: "0.000001", class: "form-input" %>
+    </div>
+    <%= f.submit "Save rate", class: "btn-primary" %>
+  <% end %>
+
+  <% if @rates.any? %>
+    <ul class="card mt-6 divide-y divide-slate-100 p-0">
+      <% @rates.each do |rate| %>
+        <li id="<%= dom_id(rate) %>" class="flex items-center justify-between px-4 py-3 text-sm">
+          <span>1 <%= rate.currency %> = <strong><%= rate.rate.to_s("F") %></strong> <%= current_user.currency %></span>
+          <span class="flex items-center gap-4">
+            <span class="text-xs text-slate-400">updated <%= time_ago_in_words(rate.updated_at) %> ago</span>
+            <%= button_to "Remove", exchange_rate_path(rate), method: :delete, class: "text-rose-600 hover:text-rose-500" %>
+          </span>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
