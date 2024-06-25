@@ -54,4 +54,10 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_select "h2", "Getting started"
     assert_select "a", "Import a bank statement"
   end
+
+  test "shows net worth across accounts" do
+    sign_in users(:ayesha)
+    get dashboard_url
+    assert_select ".card", text: /Net worth\s+Rs 314,150.00/
+  end
 end
