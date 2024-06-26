@@ -21,4 +21,14 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "SM", user.initials
     assert_equal "Sara", user.first_name
   end
+
+  test "finance cache version changes with new activity" do
+    user = users(:ayesha)
+    before = user.finance_cache_version
+
+    travel 1.second do
+      transactions(:rent).touch
+    end
+    assert_not_equal before, user.finance_cache_version
+  end
 end

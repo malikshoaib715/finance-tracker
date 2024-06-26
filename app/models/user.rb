@@ -30,6 +30,14 @@ class User < ApplicationRecord
 
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
 
+  # Changes whenever anything that feeds the reports changes: used as a cache
+  # key so charts are only recomputed after new activity.
+  def finance_cache_version
+    [ transactions, transfers, accounts, budgets, exchange_rates ].map do |relation|
+      relation.reorder(nil).pick(Arel.sql("COUNT(*), MAX(updated_at)"))
+    end.flatten.join("-")
+  end
+
   def first_name
     name.split.first
   end

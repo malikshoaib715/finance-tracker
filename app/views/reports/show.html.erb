@@ -3,6 +3,7 @@
 
 <h1 class="text-2xl font-bold tracking-tight text-slate-900">Reports</h1>
 
+<% cache [ current_user, :reports_charts, current_user.finance_cache_version, current_user.number_format ] do %>
 <section class="card mt-6">
   <h2 class="font-semibold text-slate-900">Income vs expenses</h2>
   <p class="text-sm text-slate-500">Last 12 months</p>
@@ -25,5 +26,7 @@
     <%= line_chart @net_worth.series, colors: [ "#059669" ], height: "260px", prefix: unit, thousands: ",", round: 0 %>
   </div>
 </section>
+
+<% end %>
 
 <%= render "category_breakdown", breakdown: @breakdown %>
