@@ -11,6 +11,8 @@ in one place, import bank statements and see where your money goes.
 - Ruby 3.3, Rails 7.1
 - PostgreSQL
 - Hotwire (Turbo + Stimulus) with import maps — no Node build step
+- GoodJob for background jobs and cron (Postgres-backed, no Redis)
+- Chartkick + Chart.js for charts
 - Tailwind CSS (`tailwindcss-rails`)
 - Minitest + Capybara
 
@@ -35,15 +37,25 @@ http://localhost:3000/good_job in development.
 ## Running the tests
 
 ```bash
-bin/rails test
+bin/rails test          # models, controllers, integration
+bin/rails test:system   # browser tests (headless Chrome)
+bin/rubocop             # style
+bin/brakeman            # security scan
 ```
 
-## Roadmap
+## Features
 
-- [x] User accounts and authentication
-- [ ] Accounts (cash, bank, card, wallet) with balances
-- [ ] Categories and transactions
-- [ ] Monthly budgets with overspend alerts
-- [ ] Dashboard charts and reports
-- [ ] CSV import from bank statements
-- [x] Recurring transactions
+- **Accounts** — cash, bank, cards, wallets and savings with running balances, reconciliation and archiving
+- **Transactions** — categories, tags, notes, receipts (images/PDF), transfers between accounts, bulk edits
+- **Filtering** — search, account/category/tag/type filters, month-by-month browsing, CSV export
+- **Bank imports** — upload a statement CSV, map its columns, preview with duplicate detection, undo
+- **Rules** — "description contains X → category Y", applied to new, imported and old transactions
+- **Budgets** — monthly limits per category with progress bars and overspend warnings
+- **Recurring transactions** — salary, rent and subscriptions posted automatically every day
+- **Goals** — savings targets with the monthly amount needed to hit the date
+- **Reports** — income vs expenses, category breakdown with month-over-month change, net worth
+- **Multi-currency** — accounts in other currencies included via your own exchange rates
+- **Monthly email** — a summary of last month on the 1st (opt-out in settings)
+- **Quality of life** — quick add, keyboard shortcuts (`n`, `/`), installable PWA, lakh/crore grouping
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for how it's built.
