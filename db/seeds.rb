@@ -8,6 +8,10 @@ demo = User.find_or_create_by!(email: "demo@example.com") do |user|
   user.assign_attributes(name: "Demo User", password: "password123", currency: "PKR", time_zone: "Karachi")
   user.skip_confirmation!
 end
-Category.create_defaults_for(demo)
 
-puts "Seeded demo user: #{demo.email} / password123"
+if demo.transactions.none?
+  DemoData.new(demo).generate
+  puts "Generated a year of demo data for #{demo.email}"
+end
+
+puts "Demo user: #{demo.email} / password123"
