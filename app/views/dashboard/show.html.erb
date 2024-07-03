@@ -34,19 +34,19 @@
 <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
   <div class="card">
     <p class="text-sm text-slate-500">Net worth</p>
-    <p class="mt-1 text-2xl font-semibold"><%= money_tag(@net_worth_cents) %></p>
+    <p class="mt-1 whitespace-nowrap text-xl font-semibold xl:text-2xl"><%= money_tag(@net_worth_cents) %></p>
   </div>
   <div class="card">
     <p class="text-sm text-slate-500">Income this month</p>
-    <p class="mt-1 text-2xl font-semibold"><%= money_tag(@income_cents) %></p>
+    <p class="mt-1 whitespace-nowrap text-xl font-semibold xl:text-2xl"><%= money_tag(@income_cents) %></p>
   </div>
   <div class="card">
     <p class="text-sm text-slate-500">Spent this month</p>
-    <p class="mt-1 text-2xl font-semibold"><%= money_tag(-@expense_cents) %></p>
+    <p class="mt-1 whitespace-nowrap text-xl font-semibold xl:text-2xl"><%= money_tag(-@expense_cents) %></p>
   </div>
   <div class="card">
     <p class="text-sm text-slate-500">Net</p>
-    <p class="mt-1 text-2xl font-semibold"><%= money_tag(@income_cents - @expense_cents) %></p>
+    <p class="mt-1 whitespace-nowrap text-xl font-semibold xl:text-2xl"><%= money_tag(@income_cents - @expense_cents) %></p>
   </div>
 </div>
 
