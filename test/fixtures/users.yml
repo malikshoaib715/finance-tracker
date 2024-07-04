@@ -1,11 +1,15 @@
+# Test users live in UTC so dates computed in tests match the request's zone
+# (requests run in the user's time zone).
 ayesha:
   name: Ayesha Khan
+  time_zone: UTC
   email: ayesha@example.com
   confirmed_at: <%= 1.month.ago %>
   encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
 
 bilal:
   name: Bilal Ahmed
+  time_zone: UTC
   email: bilal@example.com
   confirmed_at: <%= 1.month.ago %>
   encrypted_password: <%= Devise::Encryptor.digest(User, "password123") %>
