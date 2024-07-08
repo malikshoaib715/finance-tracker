@@ -19,6 +19,9 @@
         <% if transaction.category %>
           · <%= category_badge(transaction.category) %>
         <% end %>
+        <% if (source = transaction.source) %>
+          · <span class="rounded bg-slate-100 px-1.5 text-[10px] font-medium uppercase tracking-wide text-slate-500"><%= source %></span>
+        <% end %>
         <% transaction.tags.each do |tag| %>
           <span class="text-slate-400">#<%= tag.name %></span>
         <% end %>

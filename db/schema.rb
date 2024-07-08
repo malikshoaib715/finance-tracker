@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_20_145929) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_08_060620) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -263,9 +263,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_20_145929) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "import_id"
+    t.bigint "recurring_transaction_id"
     t.index ["account_id", "occurred_on"], name: "index_transactions_on_account_id_and_occurred_on"
     t.index ["category_id", "occurred_on"], name: "index_transactions_on_category_id_and_occurred_on"
     t.index ["import_id"], name: "index_transactions_on_import_id"
+    t.index ["recurring_transaction_id"], name: "index_transactions_on_recurring_transaction_id"
     t.index ["user_id", "occurred_on"], name: "index_transactions_on_user_id_and_occurred_on"
     t.check_constraint "amount_cents > 0", name: "transactions_amount_positive"
   end
@@ -335,6 +337,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_20_145929) do
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "categories"
   add_foreign_key "transactions", "imports", on_delete: :nullify
+  add_foreign_key "transactions", "recurring_transactions", on_delete: :nullify, validate: false
   add_foreign_key "transactions", "users"
   add_foreign_key "transfers", "accounts", column: "from_account_id"
   add_foreign_key "transfers", "accounts", column: "to_account_id"

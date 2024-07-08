@@ -5,6 +5,7 @@ class RecurringTransaction < ApplicationRecord
   belongs_to :user
   belongs_to :account
   belongs_to :category, optional: true
+  has_many :transactions, dependent: :nullify
 
   enum :kind, { expense: "expense", income: "income" }, default: :expense, validate: true
   enum :frequency, FREQUENCIES.keys.index_with(&:itself), default: :monthly, validate: true

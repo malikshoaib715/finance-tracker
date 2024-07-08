@@ -37,4 +37,10 @@ class RecurringTransaction::GeneratorTest < ActiveSupport::TestCase
   test "run_due handles every due item and skips paused ones" do
     assert_equal 1, RecurringTransaction::Generator.run_due
   end
+
+  test "generated transactions remember where they came from" do
+    created = RecurringTransaction::Generator.new(recurring_transactions(:rent)).call.first
+    assert_equal recurring_transactions(:rent), created.recurring_transaction
+    assert_equal "Recurring", created.source
+  end
 end

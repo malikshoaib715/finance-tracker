@@ -3,6 +3,7 @@ class Transaction < ApplicationRecord
   belongs_to :account
   belongs_to :category, optional: true
   belongs_to :import, optional: true
+  belongs_to :recurring_transaction, optional: true
   has_many :taggings, foreign_key: :transaction_id, inverse_of: :owner_transaction, dependent: :delete_all
   has_many :tags, through: :taggings
   has_many_attached :receipts
@@ -38,6 +39,12 @@ class Transaction < ApplicationRecord
     self.amount_cents = (BigDecimal(value.to_s.delete(",")) * 100).round.abs
   rescue ArgumentError, TypeError
     self.amount_cents = nil
+  end
+
+  def source
+    if import_id then "Imported"
+    elsif recurring_transaction_id then "Recurring"
+    end
   end
 
   # The budget this expense counts against, if one is set for its month.

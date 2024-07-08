@@ -32,7 +32,7 @@ class RecurringTransaction::Generator
   private
 
   def create_transaction(date)
-    @item.user.transactions.create!(account: @item.account, category: @item.category, kind: @item.kind,
+    @item.user.transactions.create!(recurring_transaction: @item, account: @item.account, category: @item.category, kind: @item.kind,
       amount_cents: @item.amount_cents, occurred_on: date, description: @item.description)
   end
 end
