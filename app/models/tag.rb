@@ -9,4 +9,17 @@ class Tag < ApplicationRecord
             uniqueness: { scope: :user_id, case_sensitive: false }
 
   scope :alphabetical, -> { order(:name) }
+
+  # Renaming onto an existing tag merges the two: taggings move over, this one goes.
+  def rename_or_merge(new_name)
+    target = user.tags.where.not(id: id).find_by(name: self.class.normalize_value_for(:name, new_name))
+    return update(name: new_name) unless target
+
+    transaction do
+      taggings.where(transaction_id: target.taggings.select(:transaction_id)).delete_all
+      taggings.update_all(tag_id: target.id)
+      destroy!
+    end
+    target
+  end
 end

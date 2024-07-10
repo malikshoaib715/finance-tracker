@@ -1,0 +1,25 @@
+<% content_for :title, "Tags" %>
+
+<div class="mx-auto w-full max-w-2xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Tags</h1>
+  <p class="mt-1 text-sm text-slate-600">Rename a tag to an existing name to merge the two.</p>
+
+  <% if @tags.any? %>
+    <ul class="card mt-6 divide-y divide-slate-100 p-0">
+      <% @tags.each do |tag| %>
+        <li id="<%= dom_id(tag) %>" class="flex items-center gap-3 px-4 py-3 text-sm">
+          <%= form_with model: tag, class: "flex flex-1 items-center gap-2" do |f| %>
+            <span class="text-slate-400">#</span>
+            <%= f.text_field :name, class: "form-input mt-0 max-w-xs py-1" %>
+            <%= f.submit "Save", class: "btn-secondary py-1" %>
+          <% end %>
+          <%= link_to pluralize(tag.usage_count, "transaction"), transactions_path(filter: { tag_id: tag.id, from: "2000-01-01" }), class: "link text-xs" %>
+          <%= button_to "Remove", tag_path(tag), method: :delete, class: "text-xs text-rose-600 hover:text-rose-500",
+                form: { data: { turbo_confirm: "Remove ##{tag.name} from all transactions?" } } %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="card mt-6 py-12 text-center text-slate-600">No tags yet — add some when recording a transaction.</div>
+  <% end %>
+</div>

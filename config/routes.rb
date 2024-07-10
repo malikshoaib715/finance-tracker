@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   end
   resources :categories
   resources :rules, except: %i[ show new ]
+  resources :tags, only: %i[ index update destroy ]
   resource :rule_application, only: :create, controller: "rules/applications"
   resources :budgets, except: :show
   resources :goals, except: :show
