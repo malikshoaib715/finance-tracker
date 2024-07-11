@@ -27,6 +27,22 @@ class Category < ApplicationRecord
 
   scope :alphabetical, -> { order(:name) }
 
+  # Moves everything filed under this category to +target+ (same user and kind)
+  # and deletes this one. Budgets move too unless the target already has one
+  # for that month, in which case this category's budget is dropped.
+  def merge_into(target)
+    raise ArgumentError, "Can only merge into another #{kind} category of the same user" unless
+      target.user_id == user_id && target.kind == kind && target != self
+
+    transaction do
+      transactions.update_all(category_id: target.id)
+      rules.update_all(category_id: target.id)
+      RecurringTransaction.where(category_id: id).update_all(category_id: target.id)
+      budgets.where.not(month: target.budgets.select(:month)).update_all(category_id: target.id)
+      destroy!
+    end
+  end
+
   def self.create_defaults_for(user)
     DEFAULTS.each do |kind, categories|
       categories.each do |name, color|

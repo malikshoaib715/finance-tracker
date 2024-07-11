@@ -24,7 +24,9 @@ Rails.application.routes.draw do
     post :run, on: :member
     post :undo, on: :member
   end
-  resources :categories
+  resources :categories do
+    resource :merge, only: :create, module: :categories
+  end
   resources :rules, except: %i[ show new ]
   resources :tags, only: %i[ index update destroy ]
   resource :rule_application, only: :create, controller: "rules/applications"

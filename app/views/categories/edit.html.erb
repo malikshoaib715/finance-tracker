@@ -6,6 +6,16 @@
     <%= render "form", category: @category %>
   </div>
 
+  <% others = current_user.categories.where(kind: @category.kind).where.not(id: @category.id).alphabetical %>
+  <% if others.any? %>
+    <%= form_with url: category_merge_path(@category), class: "mt-6 flex flex-wrap items-center gap-3 rounded-xl border border-dashed border-slate-300 p-4 text-sm",
+          data: { turbo_confirm: "Move everything in #{@category.name} and delete it?" } do |f| %>
+      <span class="text-slate-600">Merge into</span>
+      <%= select_tag :target_id, options_from_collection_for_select(others, :id, :name), class: "form-input mt-0 w-auto py-1" %>
+      <%= f.submit "Merge", class: "btn-secondary py-1" %>
+    <% end %>
+  <% end %>
+
   <div class="mt-6 flex justify-end">
     <%= button_to "Delete category", category_path(@category), method: :delete,
           form: { data: { turbo_confirm: "Delete #{@category.name}?" } },
