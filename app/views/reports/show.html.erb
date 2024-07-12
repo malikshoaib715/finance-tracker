@@ -1,7 +1,10 @@
 <% content_for :title, "Reports" %>
 <% unit = MoneyHelper::CURRENCY_UNITS.fetch(current_user.currency, "") %>
 
-<h1 class="text-2xl font-bold tracking-tight text-slate-900">Reports</h1>
+<div class="flex items-center justify-between">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Reports</h1>
+  <%= link_to "Year in review", reports_year_path, class: "btn-secondary" %>
+</div>
 
 <% cache [ current_user, :reports_charts, current_user.finance_cache_version, current_user.number_format ] do %>
 <section class="card mt-6">

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
   resources :goals, except: :show
   resources :exchange_rates, only: %i[ index create destroy ]
   resource :reports, only: :show
+  get "reports/year/(:year)", to: "reports/years#show", as: :reports_year
   resource :budget_copy, only: :create, controller: "budgets/copies"
   resources :accounts do
     resource :archive, only: %i[ create destroy ], module: :accounts
