@@ -34,6 +34,21 @@ Emails (confirmation, password reset) open in the browser at http://localhost:30
 Background jobs run on [GoodJob](https://github.com/bensheldon/good_job) inside the web process; its dashboard is at
 http://localhost:3000/good_job in development.
 
+## Deploying
+
+The repo includes a [Render blueprint](render.yaml): a web service and a managed PostgreSQL database.
+Background jobs run inside the web process (GoodJob async mode), so there is no worker to set up.
+
+Set these environment variables on the service:
+
+| Variable | Purpose |
+|---|---|
+| `RAILS_MASTER_KEY` | Decrypts `config/credentials.yml.enc` |
+| `APP_HOST` | Public host name, used in email links |
+| `SMTP_ADDRESS`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD` | Outgoing email (any SMTP provider) |
+
+The bundled `Dockerfile` works for any container host as well.
+
 ## Running the tests
 
 ```bash
