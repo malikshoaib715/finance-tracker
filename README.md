@@ -74,3 +74,7 @@ bin/brakeman            # security scan
 - **Quality of life** — quick add, keyboard shortcuts (`n`, `/`), installable PWA, lakh/crore grouping
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for how it's built.
+
+## License
+
+[MIT](LICENSE)
