@@ -6,6 +6,19 @@ in one place, import bank statements and see where your money goes.
 > Started in 2021 as a course exercise, rebuilt from the ground up in 2024 on Rails 7.1
 > and Hotwire.
 
+![Dashboard](docs/screenshots/dashboard.png)
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/transactions.png" alt="Transactions with filters and bulk actions"></td>
+    <td><img src="docs/screenshots/reports.png" alt="Reports: cash flow, net worth, category breakdown"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/budgets.png" alt="Monthly budgets"></td>
+    <td><img src="docs/screenshots/goals.png" alt="Savings goals"></td>
+  </tr>
+</table>
+
 ## Stack
 
 - Ruby 3.3, Rails 7.1
