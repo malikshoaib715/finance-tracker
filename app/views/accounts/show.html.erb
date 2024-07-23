@@ -5,8 +5,10 @@
     <p class="text-xs uppercase tracking-wide text-slate-500"><%= @account.kind.humanize %> · <%= @account.currency %></p>
     <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @account.name %></h1>
     <p class="mt-1 text-3xl font-semibold"><%= money_tag(@account.balance_cents, @account.currency) %></p>
+    <p class="hidden text-xs text-slate-500 print:block">Statement printed <%= l(Time.current, format: :long) %> · <%= current_user.name %></p>
   </div>
-  <div class="flex gap-3">
+  <div class="no-print flex gap-3">
+    <button type="button" onclick="window.print()" class="btn-secondary">Print statement</button>
     <%= link_to "Reconcile", new_account_reconciliation_path(@account), class: "btn-secondary" %>
     <%= link_to "Edit", edit_account_path(@account), class: "btn-secondary" %>
     <%= link_to "Add transaction", new_transaction_path, class: "btn-primary" %>

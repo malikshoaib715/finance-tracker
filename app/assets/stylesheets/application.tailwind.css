@@ -42,3 +42,11 @@
     @apply font-medium text-emerald-700 hover:text-emerald-600;
   }
 }
+
+/* Printing: just the content, no chrome. */
+@media print {
+  header, footer, #flash, .no-print, form.button_to, a.btn-primary, a.btn-secondary { display: none !important; }
+  body { background: #fff !important; }
+  .card { box-shadow: none !important; }
+  main { max-width: none !important; padding: 0 !important; }
+}
