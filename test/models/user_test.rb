@@ -31,4 +31,17 @@ class UserTest < ActiveSupport::TestCase
     end
     assert_not_equal before, user.finance_cache_version
   end
+
+  test "preferred account falls back to the first one" do
+    user = users(:ayesha)
+    assert_equal "HBL Credit Card", user.preferred_account.name
+    user.update!(default_account: accounts(:ayesha_cash))
+    assert_equal accounts(:ayesha_cash), user.preferred_account
+  end
+
+  test "default account must be the user's own" do
+    user = users(:ayesha)
+    user.default_account = accounts(:bilal_bank)
+    assert_not user.valid?
+  end
 end

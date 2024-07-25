@@ -28,7 +28,7 @@ class TransactionsController < ApplicationController
         current_user.transactions.build(
           occurred_on: Date.current,
           kind: params[:kind].presence_in(Transaction.kinds.keys) || "expense",
-          account: @accounts.first
+          account: current_user.preferred_account(@accounts)
         )
       end
   end

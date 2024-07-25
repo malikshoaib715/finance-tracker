@@ -35,6 +35,12 @@
       </div>
 
       <div>
+        <%= f.label :default_account_id, "Default account", class: "form-label" %>
+        <%= f.collection_select :default_account_id, resource.accounts.active.ordered, :id, :name,
+              { include_blank: "First account" }, class: "form-input sm:w-1/2" %>
+      </div>
+
+      <div>
         <%= f.label :number_format, "Number grouping", class: "form-label" %>
         <%= f.select :number_format, [ [ "1,500,000.00 (international)", "international" ], [ "15,00,000.00 (lakh / crore)", "south_asian" ] ],
               {}, class: "form-input sm:w-1/2" %>

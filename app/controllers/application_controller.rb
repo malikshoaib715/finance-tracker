@@ -11,6 +11,6 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [ :name ])
-    devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :currency, :time_zone, :monthly_summary, :number_format ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :name, :currency, :time_zone, :monthly_summary, :number_format, :default_account_id ])
   end
 end

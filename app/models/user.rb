@@ -12,6 +12,7 @@ class User < ApplicationRecord
   has_many :transactions, dependent: :delete_all
   has_many :transfers, dependent: :delete_all
   has_many :accounts, dependent: :destroy
+  belongs_to :default_account, class_name: "Account", optional: true
   has_many :categories, dependent: :destroy
   has_many :tags, dependent: :destroy
   has_many :rules, dependent: :delete_all
@@ -27,6 +28,8 @@ class User < ApplicationRecord
   validates :currency, inclusion: { in: CURRENCIES }
   enum :number_format, { international: "international", south_asian: "south_asian" },
        default: :international, validate: true, prefix: :numbers
+
+  validate :default_account_is_own, if: :default_account_id?
 
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
 
@@ -44,5 +47,16 @@ class User < ApplicationRecord
 
   def initials
     name.split.first(2).map(&:first).join.upcase
+  end
+
+  # The account forms should start with: the chosen default, else the first one.
+  def preferred_account(accounts = self.accounts.active.ordered)
+    accounts.find { |account| account.id == default_account_id } || accounts.first
+  end
+
+  private
+
+  def default_account_is_own
+    errors.add(:default_account, "is not one of yours") unless accounts.exists?(default_account_id)
   end
 end

@@ -25,7 +25,8 @@
     </div>
     <div class="w-48">
       <%= f.label :account_id, "From", class: "form-label" %>
-      <%= f.collection_select :account_id, @accounts, :id, :name, {}, class: "form-input" %>
+      <%= f.collection_select :account_id, @accounts, :id, :name,
+            { selected: current_user.preferred_account(@accounts)&.id }, class: "form-input" %>
     </div>
     <%= f.submit "Quick add", class: "btn-primary" %>
   <% end %>

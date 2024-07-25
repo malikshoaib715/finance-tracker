@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_09_133333) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_25_111734) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -309,7 +309,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_09_133333) do
     t.string "unlock_token"
     t.datetime "locked_at"
     t.string "number_format", default: "international", null: false
+    t.bigint "default_account_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["default_account_id"], name: "index_users_on_default_account_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
@@ -342,4 +344,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_09_133333) do
   add_foreign_key "transfers", "accounts", column: "from_account_id"
   add_foreign_key "transfers", "accounts", column: "to_account_id"
   add_foreign_key "transfers", "users"
+  add_foreign_key "users", "accounts", column: "default_account_id", on_delete: :nullify, validate: false
 end
