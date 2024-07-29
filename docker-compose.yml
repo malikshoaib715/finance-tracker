@@ -1,0 +1,21 @@
+# Postgres for local development, if you'd rather not install it:
+#
+#   docker compose up -d
+#   DATABASE_URL=postgres://postgres:postgres@localhost:5433 bin/setup
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      retries: 10
+
+volumes:
+  pgdata:

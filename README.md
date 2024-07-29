@@ -40,6 +40,9 @@ bin/setup        # installs gems, prepares the database
 bin/dev          # runs the Rails server and the Tailwind watcher
 ```
 
+No local Postgres? `docker compose up -d` starts one on port 5433; prefix the commands above with
+`DATABASE_URL=postgres://postgres:postgres@localhost:5433`.
+
 Then open http://localhost:3000 and sign in with the demo account created by the seeds:
 `demo@example.com` / `password123`.
 
