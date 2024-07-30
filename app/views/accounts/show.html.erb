@@ -8,7 +8,7 @@
     <p class="hidden text-xs text-slate-500 print:block">Statement printed <%= l(Time.current, format: :long) %> · <%= current_user.name %></p>
   </div>
   <div class="no-print flex gap-3">
-    <button type="button" onclick="window.print()" class="btn-secondary">Print statement</button>
+    <button type="button" data-controller="print" data-action="print#print" class="btn-secondary">Print statement</button>
     <%= link_to "Reconcile", new_account_reconciliation_path(@account), class: "btn-secondary" %>
     <%= link_to "Edit", edit_account_path(@account), class: "btn-secondary" %>
     <%= link_to "Add transaction", new_transaction_path, class: "btn-primary" %>
