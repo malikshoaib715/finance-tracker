@@ -74,8 +74,9 @@ No Redis, no separate worker process to deploy.
   (`Account.with_balances`, `Budget.with_spending`) instead of one SUM per row;
   tests pin the query counts.
 - Bullet runs in development and **raises in tests**, so a new N+1 fails CI.
-- Report charts are fragment-cached on `User#finance_cache_version`, which
+- Report chart **data** is cached on `User#finance_cache_version`, which
   changes whenever transactions, transfers, accounts, budgets or rates change.
+  The HTML isn't cached because chart script tags carry a per-request CSP nonce.
 - Indexes follow the queries (`[user_id, occurred_on]`, `[account_id, occurred_on]`,
   `[category_id, occurred_on]`); `strong_migrations` guards schema changes.
 
@@ -83,6 +84,8 @@ No Redis, no separate worker process to deploy.
 
 - Devise with confirmable and lockable (10 failed sign-ins locks for an hour).
 - Rack::Attack throttles sign-in, sign-up and password-reset attempts.
+- A nonce-based Content Security Policy: scripts only run from our origin or
+  with the request's nonce (importmap and Chartkick add it); no inline handlers.
 - Brakeman runs in CI; ignored warnings carry a note explaining why.
 - Uploaded receipts are limited to images/PDFs under 5 MB; imports to 1 MB of CSV.
 
