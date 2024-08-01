@@ -17,4 +17,11 @@ class Transactions::QuickAddsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to dashboard_url
     assert_match "Description can't be blank", flash[:alert]
   end
+
+  test "can't quick-add into someone else's account" do
+    assert_no_difference "Transaction.count" do
+      post quick_add_url, params: { quick_add: { amount: "10", description: "Sneaky", account_id: accounts(:bilal_bank).id } }
+    end
+    assert_response :not_found
+  end
 end

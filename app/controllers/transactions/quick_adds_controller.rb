@@ -1,7 +1,8 @@
 # One-line expense entry from the dashboard. Rules fill in the category.
 class Transactions::QuickAddsController < ApplicationController
   def create
-    transaction = current_user.transactions.build(quick_add_params.merge(kind: "expense", occurred_on: Date.current))
+    account = current_user.accounts.find(params.dig(:quick_add, :account_id))
+    transaction = current_user.transactions.build(quick_add_params.merge(account:, kind: "expense", occurred_on: Date.current))
 
     if transaction.save
       redirect_to dashboard_path, notice: "Added #{transaction.description} " \
@@ -14,6 +15,6 @@ class Transactions::QuickAddsController < ApplicationController
   private
 
   def quick_add_params
-    params.require(:quick_add).permit(:amount, :description, :account_id)
+    params.require(:quick_add).permit(:amount, :description)
   end
 end
