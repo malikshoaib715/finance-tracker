@@ -1,0 +1,9 @@
+ayesha_phone:
+  user: ayesha
+  name: Ayesha's phone
+  token_digest: <%= OpenSSL::Digest::SHA256.hexdigest("ft_ayesha_test_token") %>
+
+bilal_phone:
+  user: bilal
+  name: Bilal's phone
+  token_digest: <%= OpenSSL::Digest::SHA256.hexdigest("ft_bilal_test_token") %>

@@ -42,6 +42,12 @@ Rails.application.routes.draw do
     resource :position, only: :update, module: :accounts
   end
 
+  namespace :api do
+    namespace :v1 do
+      resource :me, only: :show, controller: "me"
+    end
+  end
+
   authenticated :user do
     root "dashboard#show", as: :authenticated_root
   end
