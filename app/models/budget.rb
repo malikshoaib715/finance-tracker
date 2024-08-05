@@ -47,7 +47,7 @@ class Budget < ApplicationRecord
   end
 
   def spent_cents
-    return self[:computed_spent_cents] if has_attribute?(:computed_spent_cents)
+    return self[:computed_spent_cents].to_i if has_attribute?(:computed_spent_cents)
 
     @spent_cents ||= user.transactions.expense.where(category: category, occurred_on: month.all_month).sum(:amount_cents)
   end

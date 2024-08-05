@@ -68,7 +68,7 @@ class Account < ApplicationRecord
   end
 
   def balance_cents
-    return self[:computed_balance_cents] if has_attribute?(:computed_balance_cents)
+    return self[:computed_balance_cents].to_i if has_attribute?(:computed_balance_cents)
 
     opening_balance_cents +
       transactions.income.sum(:amount_cents) - transactions.expense.sum(:amount_cents) +
