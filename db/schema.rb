@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_02_131046) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_06_165136) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -280,6 +280,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_02_131046) do
     t.index ["import_id"], name: "index_transactions_on_import_id"
     t.index ["recurring_transaction_id"], name: "index_transactions_on_recurring_transaction_id"
     t.index ["user_id", "occurred_on"], name: "index_transactions_on_user_id_and_occurred_on"
+    t.index ["user_id", "updated_at", "id"], name: "index_transactions_on_user_id_and_updated_at_and_id"
     t.check_constraint "amount_cents > 0", name: "transactions_amount_positive"
   end
 
