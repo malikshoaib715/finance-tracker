@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       resources :accounts, only: :index
       resources :categories, only: :index
       resources :transactions, only: %i[ index show create update destroy ]
+      resources :deletions, only: :index
     end
   end
 

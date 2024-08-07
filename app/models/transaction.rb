@@ -1,4 +1,6 @@
 class Transaction < ApplicationRecord
+  include LeavesTombstone
+
   belongs_to :user
   belongs_to :account
   belongs_to :category, optional: true

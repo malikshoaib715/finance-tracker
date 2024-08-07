@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_06_165136) do
+ActiveRecord::Schema[7.1].define(version: 2024_08_07_104957) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -90,6 +90,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_06_165136) do
     t.datetime "updated_at", null: false
     t.index ["user_id", "kind", "name"], name: "index_categories_on_user_id_and_kind_and_name", unique: true
     t.index ["user_id"], name: "index_categories_on_user_id"
+  end
+
+  create_table "deletions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "deleted_at", null: false
+    t.index ["user_id", "deleted_at"], name: "index_deletions_on_user_id_and_deleted_at"
   end
 
   create_table "exchange_rates", force: :cascade do |t|
@@ -336,6 +344,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_06_165136) do
   add_foreign_key "budgets", "categories", on_delete: :cascade
   add_foreign_key "budgets", "users"
   add_foreign_key "categories", "users"
+  add_foreign_key "deletions", "users", on_delete: :cascade
   add_foreign_key "exchange_rates", "users"
   add_foreign_key "goals", "accounts", on_delete: :nullify
   add_foreign_key "goals", "users"
