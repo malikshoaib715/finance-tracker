@@ -14,8 +14,9 @@ class Api::TransactionsTest < ActionDispatch::IntegrationTest
   end
 
   test "returns only changes since a time" do
+    Transaction.update_all(updated_at: 1.hour.ago)
     transactions(:rent).touch
-    get api_v1_transactions_url(updated_since: 1.second.ago.iso8601), headers: AUTH
+    get api_v1_transactions_url(updated_since: 1.minute.ago.iso8601), headers: AUTH
     assert_equal [ "Flat rent" ], response.parsed_body["transactions"].map { _1["description"] }
   end
 
@@ -50,6 +51,19 @@ class Api::TransactionsTest < ActionDispatch::IntegrationTest
 
     delete api_v1_transaction_url(id), headers: AUTH
     assert_response :no_content
+  end
+
+  test "creating with a client_id is idempotent" do
+    payload = { transaction: { client_id: "3f1c2b8e-8a8c-4f2e-9a51-0d9b8f1e2a77", kind: "expense", amount_cents: 5_000,
+                               occurred_on: Date.current, description: "Chai", account_id: accounts(:ayesha_cash).id } }
+
+    assert_difference "Transaction.count", 1 do
+      post api_v1_transactions_url, headers: AUTH, as: :json, params: payload
+      assert_response :created
+      post api_v1_transactions_url, headers: AUTH, as: :json, params: payload
+      assert_response :ok
+    end
+    assert_equal payload.dig(:transaction, :client_id), response.parsed_body["client_id"]
   end
 
   test "validation errors come back as 422 with details" do

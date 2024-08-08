@@ -25,13 +25,22 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     render json: serialize(@transaction)
   end
 
+  # Idempotent when the client sends a client_id: repeating the request returns
+  # the transaction created the first time instead of a duplicate.
   def create
-    transaction = current_user.transactions.build(transaction_params)
+    client_id = params[:transaction][:client_id].presence
+    if client_id && (existing = current_user.transactions.find_by(client_id:))
+      return render json: serialize(existing), status: :ok
+    end
+
+    transaction = current_user.transactions.build(transaction_params.merge(client_id:))
     if transaction.save
       render json: serialize(transaction), status: :created
     else
       render_invalid(transaction)
     end
+  rescue ActiveRecord::RecordNotUnique
+    render json: serialize(current_user.transactions.find_by!(client_id:)), status: :ok
   end
 
   def update
@@ -64,7 +73,7 @@ class Api::V1::TransactionsController < Api::V1::BaseController
   end
 
   def serialize(transaction)
-    transaction.slice(:id, :account_id, :category_id, :kind, :amount_cents, :occurred_on, :description, :notes,
+    transaction.slice(:id, :client_id, :account_id, :category_id, :kind, :amount_cents, :occurred_on, :description, :notes,
                       :created_at, :updated_at).merge(tags: transaction.tags.map(&:name))
   end
 
