@@ -82,7 +82,10 @@
   <div class="card">
     <h2 class="text-base font-semibold text-slate-900">Your data</h2>
     <p class="mt-1 text-sm text-slate-600">Download everything you've entered — accounts, transactions, budgets, goals — as a JSON file.</p>
-    <%= link_to "Download my data", data_export_path, class: "btn-secondary mt-4", data: { turbo: false } %>
+    <div class="mt-4 flex gap-3">
+      <%= link_to "Download my data", data_export_path, class: "btn-secondary", data: { turbo: false } %>
+      <%= link_to "API tokens", api_tokens_path, class: "btn-secondary" %>
+    </div>
   </div>
 
   <div class="card ring-rose-200">

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   resource :dashboard, only: :show, controller: "dashboard"
   resource :data_export, only: :show, controller: "users/data_exports"
+  resources :api_tokens, only: %i[ index create destroy ], controller: "users/api_tokens"
   resources :transactions, except: :show do
     get :export, on: :collection, defaults: { format: :csv }
     resources :receipts, only: :destroy, module: :transactions

@@ -1,0 +1,43 @@
+<% content_for :title, "API tokens" %>
+
+<div class="mx-auto w-full max-w-2xl">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">API tokens</h1>
+  <p class="mt-1 text-sm text-slate-600">
+    Tokens let the mobile app or your own scripts use the
+    <%= link_to "JSON API", "https://github.com/malikshoaib715/finance-tracker/blob/master/docs/API.md", class: "link" %>.
+    Send them as <code class="text-xs">Authorization: Bearer &lt;token&gt;</code>.
+  </p>
+
+  <% if @new_token %>
+    <div class="mt-6 rounded-lg bg-emerald-50 p-4 ring-1 ring-emerald-200">
+      <p class="text-sm font-medium text-emerald-800">Your new token</p>
+      <code class="mt-2 block select-all break-all rounded bg-white p-2 text-sm"><%= @new_token %></code>
+    </div>
+  <% end %>
+
+  <%= form_with scope: :api_token, url: api_tokens_path, class: "card mt-6 flex items-end gap-3" do |f| %>
+    <div class="flex-1">
+      <%= f.label :name, "Token name", class: "form-label" %>
+      <%= f.text_field :name, placeholder: "e.g. My phone", required: true, class: "form-input" %>
+    </div>
+    <%= f.submit "Create token", class: "btn-primary" %>
+  <% end %>
+
+  <% if @api_tokens.any? %>
+    <ul class="card mt-6 divide-y divide-slate-100 p-0">
+      <% @api_tokens.each do |token| %>
+        <li id="<%= dom_id(token) %>" class="flex items-center justify-between px-4 py-3 text-sm">
+          <div>
+            <p class="font-medium text-slate-900"><%= token.name %></p>
+            <p class="text-xs text-slate-500">
+              Created <%= l(token.created_at.to_date, format: :long) %> ·
+              <%= token.last_used_at ? "last used #{time_ago_in_words(token.last_used_at)} ago" : "never used" %>
+            </p>
+          </div>
+          <%= button_to "Revoke", api_token_path(token), method: :delete, class: "text-rose-600 hover:text-rose-500",
+                form: { data: { turbo_confirm: "Revoke “#{token.name}”? Apps using it will be signed out." } } %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>
