@@ -45,6 +45,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      resource :session, only: %i[ create destroy ]
       resource :me, only: :show, controller: "me"
       resources :accounts, only: :index
       resources :categories, only: :index
