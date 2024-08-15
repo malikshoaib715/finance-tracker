@@ -89,7 +89,8 @@ bin/brakeman            # security scan
 - **Monthly email** — a summary of last month on the 1st (opt-out in settings)
 - **Quality of life** — quick add, keyboard shortcuts (`n`, `/`), installable PWA, lakh/crore grouping
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for how it's built.
+See [ARCHITECTURE.md](ARCHITECTURE.md) for how it's built and [docs/API.md](docs/API.md) for the JSON API
+that the mobile app uses.
 
 ## License
 

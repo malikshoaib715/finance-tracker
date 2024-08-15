@@ -16,4 +16,12 @@ class RackAttackTest < ActionDispatch::IntegrationTest
     assert_equal 429, response.status
     assert_match "Too many attempts", response.body
   end
+
+  test "throttles a runaway API client per token" do
+    300.times { get api_v1_me_url, headers: { "Authorization" => "Bearer ft_ayesha_test_token" } }
+    assert_response :success
+
+    get api_v1_me_url, headers: { "Authorization" => "Bearer ft_ayesha_test_token" }
+    assert_equal 429, response.status
+  end
 end

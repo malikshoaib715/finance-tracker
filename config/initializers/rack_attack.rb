@@ -15,6 +15,13 @@ class Rack::Attack
     end
   end
 
+  # Generous enough for sync bursts, low enough to stop a runaway client.
+  throttle("api/token", limit: 300, period: 5.minutes) do |request|
+    if request.path.start_with?("/api/") && (auth = request.get_header("HTTP_AUTHORIZATION")).present?
+      Digest::SHA256.hexdigest(auth)
+    end
+  end
+
   self.throttled_responder = lambda do |_request|
     [ 429, { "content-type" => "text/plain", "retry-after" => "60" }, [ "Too many attempts. Please wait a minute and try again.\n" ] ]
   end
