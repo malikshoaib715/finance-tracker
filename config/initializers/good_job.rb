@@ -7,6 +7,11 @@ Rails.application.configure do
       class: "GenerateRecurringTransactionsJob",
       description: "Record recurring transactions that have fallen due"
     },
+    prune_deletions: {
+      cron: "30 3 * * 0", # Sundays 03:30
+      class: "PruneDeletionsJob",
+      description: "Drop sync tombstones older than 90 days"
+    },
     monthly_summaries: {
       cron: "0 8 1 * *", # 08:00 on the 1st of every month
       class: "SendMonthlySummariesJob",

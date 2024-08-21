@@ -69,6 +69,9 @@ Offline clients keep a high-water mark and pull changes:
    never duplicates.
 4. Store the time you started step 1 as the next high-water mark.
 
+Tombstones are kept for 90 days. A client that hasn't synced for longer should
+discard its local copy and download everything again.
+
 ## Errors and limits
 
 | Status | Meaning |
