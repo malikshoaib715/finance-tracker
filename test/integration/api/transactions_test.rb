@@ -66,6 +66,22 @@ class Api::TransactionsTest < ActionDispatch::IntegrationTest
     assert_equal payload.dig(:transaction, :client_id), response.parsed_body["client_id"]
   end
 
+  test "refuses a stale update with 409 and the server copy" do
+    seen = transactions(:rent).updated_at
+    travel 1.minute do
+      transactions(:rent).update!(description: "Rent (edited on the web)")
+    end
+
+    patch api_v1_transaction_url(transactions(:rent)), headers: AUTH, as: :json,
+          params: { if_unmodified_since: seen.iso8601(6), transaction: { description: "Rent (phone)" } }
+    assert_response :conflict
+    assert_equal "Rent (edited on the web)", response.parsed_body.dig("transaction", "description")
+
+    patch api_v1_transaction_url(transactions(:rent)), headers: AUTH, as: :json,
+          params: { if_unmodified_since: transactions(:rent).reload.updated_at.iso8601(6), transaction: { description: "Rent (phone)" } }
+    assert_response :success
+  end
+
   test "validation errors come back as 422 with details" do
     post api_v1_transactions_url, headers: AUTH, as: :json, params: { transaction: { kind: "expense", amount_cents: 0 } }
     assert_response :unprocessable_entity

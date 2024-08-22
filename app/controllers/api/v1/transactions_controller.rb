@@ -43,7 +43,14 @@ class Api::V1::TransactionsController < Api::V1::BaseController
     render json: serialize(current_user.transactions.find_by!(client_id:)), status: :ok
   end
 
+  # Optional optimistic concurrency: send the updated_at you last saw as
+  # `if_unmodified_since`; a newer server copy returns 409 with that copy.
   def update
+    if (seen = params[:if_unmodified_since].presence) && @transaction.updated_at.floor(6) > Time.iso8601(seen).floor(6)
+      return render json: { error: { message: "Changed on the server since you last synced" }, transaction: serialize(@transaction) },
+                    status: :conflict
+    end
+
     if @transaction.update(transaction_params)
       render json: serialize(@transaction)
     else

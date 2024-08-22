@@ -28,5 +28,5 @@ Conflicts resolve as last-write-wins at the server.
 - Clients store one high-water mark and do bounded work per sync.
 - Tombstones grow forever unless pruned; a periodic prune of tombstones older than the
   longest expected offline period (e.g. 90 days) is a small follow-up job.
-- Last-write-wins can lose an edit made on two devices at once; acceptable for personal
-  finance, and detectable later by adding an `If-Match`/version check on PATCH.
+- Last-write-wins can lose an edit made on two devices at once. Clients can opt into a
+  check by sending `if_unmodified_since` on PATCH and handling `409 Conflict`.

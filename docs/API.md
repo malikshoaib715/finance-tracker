@@ -57,6 +57,12 @@ curl -X POST https://your-host/api/v1/transactions \
 
 Categorisation rules apply when `category_id` is omitted.
 
+### Updating safely
+
+`PATCH` accepts an optional `if_unmodified_since` (the `updated_at` you last saw). If the
+server copy is newer you get `409 Conflict` with the current `transaction`, so the app can
+ask the user which version to keep instead of silently overwriting.
+
 ## Sync
 
 Offline clients keep a high-water mark and pull changes:
@@ -79,5 +85,6 @@ discard its local copy and download everything again.
 | `400` | Malformed parameter (e.g. a bad timestamp or cursor) |
 | `401` | Missing, invalid or revoked token / wrong credentials |
 | `404` | Not found (or not yours) |
+| `409` | Update conflicts with a newer server copy (when `if_unmodified_since` is sent) |
 | `422` | Validation failed — see `error.details` |
 | `429` | Rate limited: 300 requests per 5 minutes per token; sign-in is throttled separately |
