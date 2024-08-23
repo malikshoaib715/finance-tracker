@@ -10,9 +10,11 @@ Stimulus) for interactivity, Tailwind for styling, PostgreSQL for everything
 through import maps and Tailwind runs as a standalone binary.
 
 ```
-Browser ── Turbo/Stimulus ──▶ Rails controllers ──▶ models / plain Ruby objects ──▶ PostgreSQL
+Browser ── Turbo/Stimulus ──▶ Rails controllers ──┐
+                                                  ├──▶ models / plain Ruby objects ──▶ PostgreSQL
+Mobile app ── JSON + Bearer token ──▶ /api/v1 ────┘
                                      │
-                                     └──▶ Active Job (GoodJob, in-process) ──▶ mailers, recurring transactions
+                                     └──▶ Active Job (GoodJob, in-process) ──▶ mailers, recurring, pruning
 ```
 
 ## Data model
@@ -59,12 +61,22 @@ first-of-month budget dates).
 - **Recurring transactions** are posted by `RecurringTransaction::Generator`,
   which locks the row so concurrent runs can't double-post.
 
+## JSON API
+
+`/api/v1` (documented in [docs/API.md](docs/API.md)) serves the mobile app. It is a
+separate `ActionController::API` stack: bearer tokens stored as SHA-256 digests, no
+cookies or CSRF, JSON errors, and a per-token rate limit. It is designed for offline
+clients — a change feed with cursor paging, deletion tombstones, idempotent creates via
+client-generated UUIDs and optional conflict detection on updates
+([ADR 3](docs/adr/0003-offline-sync-protocol.md)).
+
 ## Background work
 
 GoodJob runs Active Job in the web process (`async` mode) on Postgres, with cron:
 
 - `GenerateRecurringTransactionsJob` — daily, posts recurring transactions that fell due
 - `SendMonthlySummariesJob` — on the 1st, emails last month's summary
+- `PruneDeletionsJob` — weekly, drops sync tombstones older than 90 days
 
 No Redis, no separate worker process to deploy.
 
@@ -96,3 +108,11 @@ for every controller (including "can't touch another user's record" cases) and
 Capybara system tests for the flows that depend on JavaScript (category filter,
 bulk actions, CSV import, keyboard shortcuts). CI runs Brakeman, RuboCop
 (rails-omakase) and the full suite against Postgres on every push.
+
+## Decision records
+
+| ADR | Decision |
+|---|---|
+| [0001](docs/adr/0001-store-money-as-integer-minor-units.md) | Store money as integer minor units |
+| [0002](docs/adr/0002-run-background-jobs-on-goodjob.md) | Run background jobs on GoodJob, in-process |
+| [0003](docs/adr/0003-offline-sync-protocol.md) | Offline sync: change feed, tombstones and client ids |
