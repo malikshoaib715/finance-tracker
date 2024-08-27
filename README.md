@@ -95,3 +95,5 @@ that the mobile app uses.
 ## License
 
 [MIT](LICENSE)
+
+See [SECURITY.md](SECURITY.md) for the threat model and how to report a vulnerability.
