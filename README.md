@@ -1,5 +1,8 @@
 # Finance Tracker
 
+[![CI](https://github.com/malikshoaib715/finance-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/malikshoaib715/finance-tracker/actions/workflows/ci.yml)
+![Ruby 3.3](https://img.shields.io/badge/ruby-3.3-red) ![Rails 7.1](https://img.shields.io/badge/rails-7.1-red) ![License MIT](https://img.shields.io/badge/license-MIT-green)
+
 A personal finance app built with Ruby on Rails: track accounts, spending and budgets
 in one place, import bank statements and see where your money goes.
 
@@ -72,7 +75,11 @@ bin/rails test          # models, controllers, integration
 bin/rails test:system   # browser tests (headless Chrome)
 bin/rubocop             # style
 bin/brakeman            # security scan
+COVERAGE=1 bin/rails test  # with a coverage report in coverage/
 ```
+
+The suite has ~240 tests at about 92% line coverage. Bullet raises on N+1 queries in tests,
+so performance regressions fail CI along with the security scan and the linter.
 
 ## Features
 
