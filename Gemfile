@@ -91,7 +91,7 @@ group :development do
   # gem "rack-mini-profiler"
 
   # Preview emails in the browser instead of sending them [https://github.com/fgrehm/letter_opener_web]
-  gem "letter_opener_web", "~> 2.0"
+  gem "letter_opener_web", "~> 3.0"
 
   # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
   # gem "spring"
