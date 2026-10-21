@@ -36,6 +36,9 @@ gem "groupdate"
 # Catch unsafe migrations in development [https://github.com/ankane/strong_migrations]
 gem "strong_migrations"
 
+# CORS for the JSON API, so the Flutter web build can call it [https://github.com/cyu/rack-cors]
+gem "rack-cors"
+
 # Throttle abusive requests [https://github.com/rack/rack-attack]
 gem "rack-attack"
 

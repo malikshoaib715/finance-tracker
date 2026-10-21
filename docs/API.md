@@ -23,6 +23,9 @@ curl https://your-host/api/v1/me -H 'Authorization: Bearer ft_…'
 `DELETE /api/v1/session` revokes the token that made the request (sign out).
 Tokens are stored as SHA-256 digests; a lost token can't be recovered, only revoked.
 
+Browser clients (like the Flutter web build) need their origin listed in the
+`CORS_ORIGINS` environment variable, comma-separated.
+
 ## Endpoints
 
 | Method & path | Purpose |
