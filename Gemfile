@@ -24,7 +24,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 
 # Use Tailwind CSS [https://github.com/rails/tailwindcss-rails]
-gem "tailwindcss-rails", "~> 2.7" # v3+ moves to Tailwind 4; upgrade deliberately
+gem "tailwindcss-rails", "~> 4.6" # v3+ moves to Tailwind 4; upgrade deliberately
 
 # Postgres-backed Active Job backend with cron [https://github.com/bensheldon/good_job]
 gem "good_job", "~> 3.28"
