@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 — 2026-11-02
+
+### Subscriptions from email
+- Forward receipts to a private address (Action Mailbox) or connect Gmail read-only (OAuth, encrypted tokens)
+- Parsers for Apple, Google Play, Stripe-billed services, Netflix, Spotify, LinkedIn and YouTube receipts
+- Subscription detection with history, status (active / failing / trial / canceled), card used and monthly cost
+- Alerts for failing payments, weekly plans, trials and price changes; Subscriptions page and `GET /api/v1/subscriptions`
+- ADR 4 on email ingestion and privacy: only extracted facts are stored; disconnecting deletes them
+
 ## 1.0.0 — 2024-08-30
 
 First complete release of the 2024 rebuild.

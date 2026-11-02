@@ -61,6 +61,16 @@ first-of-month budget dates).
 - **Recurring transactions** are posted by `RecurringTransaction::Generator`,
   which locks the row so concurrent runs can't double-post.
 
+## Subscriptions from email
+
+Receipts arrive by forwarding (Action Mailbox, `ReceiptsMailbox`) or from a connected
+Gmail account (`Gmail::Client` + `GmailSyncJob`). `Receipts::Parser` picks a
+sender-specific parser (Apple, Stripe, Netflix, Spotify, LinkedIn, YouTube, Google
+Play) that returns `Receipts::Fact`s; `Subscriptions::Detector` folds them into
+`Subscription`s and dated `SubscriptionEvent`s idempotently; `Subscriptions::Alerts`
+flags failing payments, weekly plans, trials and price changes. Only extracted facts
+are stored ([ADR 4](docs/adr/0004-reading-receipts-from-email.md)).
+
 ## JSON API
 
 `/api/v1` (documented in [docs/API.md](docs/API.md)) serves the mobile app. It is a
@@ -116,3 +126,4 @@ bulk actions, CSV import, keyboard shortcuts). CI runs Brakeman, RuboCop
 | [0001](docs/adr/0001-store-money-as-integer-minor-units.md) | Store money as integer minor units |
 | [0002](docs/adr/0002-run-background-jobs-on-goodjob.md) | Run background jobs on GoodJob, in-process |
 | [0003](docs/adr/0003-offline-sync-protocol.md) | Offline sync: change feed, tombstones and client ids |
+| [0004](docs/adr/0004-reading-receipts-from-email.md) | Reading subscription receipts from email (forwarding + Gmail) |

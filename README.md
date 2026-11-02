@@ -65,6 +65,9 @@ Set these environment variables on the service:
 | `RAILS_MASTER_KEY` | Decrypts `config/credentials.yml.enc` |
 | `APP_HOST` | Public host name, used in email links |
 | `SMTP_ADDRESS`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD` | Outgoing email (any SMTP provider) |
+| `ACTION_MAILBOX_INGRESS` (+ provider keys), `INBOUND_EMAIL_DOMAIN` | Receiving forwarded receipts |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | "Connect Gmail" (read-only; testing mode until Google verification) |
+| `AR_ENCRYPTION_PRIMARY_KEY`, `AR_ENCRYPTION_DETERMINISTIC_KEY`, `AR_ENCRYPTION_KEY_DERIVATION_SALT` | Encrypting stored mail tokens |
 
 The bundled `Dockerfile` works for any container host as well.
 
@@ -93,6 +96,8 @@ so performance regressions fail CI along with the security scan and the linter.
 - **Goals** — savings targets with the monthly amount needed to hit the date
 - **Reports** — income vs expenses, category breakdown with month-over-month change, net worth
 - **Multi-currency** — accounts in other currencies included via your own exchange rates
+- **Subscriptions from email** — forward receipts or connect Gmail (read-only); see every subscription with
+  its card, monthly cost, failing payments, weekly plans and price changes
 - **Monthly email** — a summary of last month on the 1st (opt-out in settings)
 - **Quality of life** — quick add, keyboard shortcuts (`n`, `/`), installable PWA, lakh/crore grouping
 
