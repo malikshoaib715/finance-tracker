@@ -21,6 +21,14 @@ class User < ApplicationRecord
   has_many :api_tokens, dependent: :delete_all
   has_many :deletions, dependent: :delete_all
   has_many :subscriptions, dependent: :destroy
+
+  # Private address for forwarding receipts: receipts-<token>@<INBOUND_DOMAIN>.
+  has_secure_token :receipts_token, length: 24
+
+  def receipts_address
+    domain = ENV.fetch("INBOUND_EMAIL_DOMAIN", "inbound.financetracker.app")
+    "receipts-#{receipts_token}@#{domain}" if receipts_token
+  end
   has_many :budgets, dependent: :delete_all
 
   after_create_commit -> { Category.create_defaults_for(self) }

@@ -1,6 +1,9 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  # Prepare the ingress controller used to receive mail
+  # config.action_mailbox.ingress = :relay
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Code is not reloaded between requests.
@@ -109,5 +112,11 @@ Rails.application.configure do
       authentication: :plain,
       enable_starttls_auto: true
     }
+  end
+
+  # Inbound email for forwarded receipts (Action Mailbox): postmark, mailgun,
+  # sendgrid, mandrill or relay, plus that provider's credentials.
+  if ENV["ACTION_MAILBOX_INGRESS"].present?
+    config.action_mailbox.ingress = ENV["ACTION_MAILBOX_INGRESS"].to_sym
   end
 end

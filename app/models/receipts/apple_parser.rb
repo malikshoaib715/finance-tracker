@@ -26,7 +26,8 @@ class Receipts::AppleParser
         service: service.strip, kind: "charged", occurred_on: email.date.to_date, amount_cents: cents,
         currency:, interval: normalize_interval(interval), plan: plan.strip, card_last4: card,
         billed_via: "apple", next_renewal_on: (Date.parse(renews) rescue nil),
-        source_ref: email.message_id, evidence: email.evidence
+        # One receipt can bill several items, so each needs its own reference.
+        source_ref: "#{email.message_id}##{service.strip}", evidence: email.evidence
       )
     end
   end
