@@ -65,4 +65,19 @@
     Forward receipts (Apple, Google Play, Netflix, Spotify, Stripe…) to your private address, or set up a forwarding rule in your email app:
   </p>
   <code class="mt-3 block select-all break-all rounded bg-slate-50 p-2 text-sm"><%= current_user.receipts_address %></code>
+
+  <div class="mt-6 border-t border-slate-100 pt-4">
+    <% if (connection = current_user.mail_connection) %>
+      <p class="text-sm text-slate-700">
+        Connected to <strong><%= connection.email %></strong>
+        <% if connection.last_synced_at %> · checked <%= time_ago_in_words(connection.last_synced_at) %> ago<% end %>
+      </p>
+      <% if connection.last_error %><p class="mt-1 text-sm text-rose-700"><%= connection.last_error %></p><% end %>
+      <%= button_to "Disconnect Gmail", mail_connection_path, method: :delete, class: "btn-secondary mt-3",
+            form: { data: { turbo_confirm: "Disconnect Gmail and delete what was learned from it?" } } %>
+    <% else %>
+      <p class="text-sm text-slate-600">Or connect Gmail to find receipts automatically. Access is read-only, only receipts and billing emails are searched, and only the extracted facts are stored.</p>
+      <%= button_to "Connect Gmail", "/auth/google", method: :post, data: { turbo: false }, class: "btn-primary mt-3" %>
+    <% end %>
+  </div>
 </section>

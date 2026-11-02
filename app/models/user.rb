@@ -21,6 +21,7 @@ class User < ApplicationRecord
   has_many :api_tokens, dependent: :delete_all
   has_many :deletions, dependent: :delete_all
   has_many :subscriptions, dependent: :destroy
+  has_one :mail_connection, dependent: :destroy
 
   # Private address for forwarding receipts: receipts-<token>@<INBOUND_DOMAIN>.
   has_secure_token :receipts_token, length: 24

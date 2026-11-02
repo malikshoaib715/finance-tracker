@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_11_02_130146) do
+ActiveRecord::Schema[7.1].define(version: 2026_11_02_130516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -230,6 +230,20 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_02_130146) do
     t.index ["user_id"], name: "index_imports_on_user_id"
   end
 
+  create_table "mail_connections", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "provider", default: "google", null: false
+    t.string "email", null: false
+    t.text "access_token"
+    t.text "refresh_token"
+    t.datetime "expires_at"
+    t.datetime "last_synced_at"
+    t.string "last_error"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_mail_connections_on_user_id", unique: true
+  end
+
   create_table "recurring_transactions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "account_id", null: false
@@ -398,6 +412,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_02_130146) do
   add_foreign_key "goals", "users"
   add_foreign_key "imports", "accounts"
   add_foreign_key "imports", "users"
+  add_foreign_key "mail_connections", "users"
   add_foreign_key "recurring_transactions", "accounts"
   add_foreign_key "recurring_transactions", "categories", on_delete: :nullify
   add_foreign_key "recurring_transactions", "users"

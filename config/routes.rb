@@ -34,6 +34,9 @@ Rails.application.routes.draw do
   resources :budgets, except: :show
   resources :goals, except: :show
   resources :subscriptions, only: :index
+  get "auth/google/callback", to: "mail_connections#create", as: :google_callback
+  get "auth/failure", to: "mail_connections#failure"
+  resource :mail_connection, only: :destroy
   resources :exchange_rates, only: %i[ index create destroy ]
   resource :reports, only: :show
   get "reports/year/(:year)", to: "reports/years#show", as: :reports_year

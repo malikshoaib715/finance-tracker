@@ -36,6 +36,10 @@ gem "groupdate"
 # Catch unsafe migrations in development [https://github.com/ankane/strong_migrations]
 gem "strong_migrations"
 
+# Connect Gmail (read-only) to find receipts [https://github.com/zquestz/omniauth-google-oauth2]
+gem "omniauth-google-oauth2"
+gem "omniauth-rails_csrf_protection"
+
 # CORS for the JSON API, so the Flutter web build can call it [https://github.com/cyu/rack-cors]
 gem "rack-cors"
 
