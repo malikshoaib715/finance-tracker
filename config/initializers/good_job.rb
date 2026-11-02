@@ -12,6 +12,11 @@ Rails.application.configure do
       class: "PruneDeletionsJob",
       description: "Drop sync tombstones older than 90 days"
     },
+    gmail_sync: {
+      cron: "0 6 * * *", # daily
+      class: "SyncConnectedMailboxesJob",
+      description: "Read new receipts from connected Gmail accounts"
+    },
     monthly_summaries: {
       cron: "0 8 1 * *", # 08:00 on the 1st of every month
       class: "SendMonthlySummariesJob",
