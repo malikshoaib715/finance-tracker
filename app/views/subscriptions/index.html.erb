@@ -1,0 +1,68 @@
+<% content_for :title, "Subscriptions" %>
+
+<div class="flex flex-wrap items-center justify-between gap-4">
+  <div>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Subscriptions</h1>
+    <p class="text-sm text-slate-500">Found in receipts you forward or connect. Only the facts are kept, never your emails.</p>
+  </div>
+  <% if @monthly_totals.any? %>
+    <div class="card py-3 text-right">
+      <p class="text-xs text-slate-500">Per month</p>
+      <% @monthly_totals.each do |currency, cents| %>
+        <p class="font-semibold"><%= money(cents, currency) %></p>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<% if @alerts.any? %>
+  <ul class="mt-6 space-y-2">
+    <% @alerts.each do |alert| %>
+      <li class="rounded-lg px-4 py-3 text-sm ring-1 <%= { danger: "bg-rose-50 text-rose-800 ring-rose-200", warning: "bg-amber-50 text-amber-800 ring-amber-200", info: "bg-sky-50 text-sky-800 ring-sky-200" }[alert.level] %>">
+        <%= alert.message %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
+
+<% if @current.any? %>
+  <ul class="card mt-6 divide-y divide-slate-100 p-0">
+    <% @current.each do |s| %>
+      <li id="<%= dom_id(s) %>" class="flex items-center justify-between gap-4 px-4 py-3">
+        <div class="min-w-0">
+          <p class="font-medium text-slate-900"><%= s.service %>
+            <% if s.failing? %><span class="ml-2 rounded bg-rose-100 px-1.5 text-xs font-medium text-rose-700">payment failing</span><% end %>
+            <% if s.trial? %><span class="ml-2 rounded bg-amber-100 px-1.5 text-xs font-medium text-amber-800">trial</span><% end %>
+          </p>
+          <p class="text-xs text-slate-500">
+            <%= s.interval.humanize %> · via <%= s.billed_via.humanize %>
+            <% if s.card_last4 %> · card ••<%= s.card_last4 %><% end %>
+            <% if s.last_charged_on %> · last charged <%= l(s.last_charged_on, format: :long) %><% end %>
+          </p>
+        </div>
+        <span class="font-semibold tabular-nums"><%= s.amount_cents ? money(s.amount_cents, s.currency) : "—" %></span>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <div class="card mt-6 py-12 text-center text-slate-600">No subscriptions found yet.</div>
+<% end %>
+
+<% if @ended.any? %>
+  <details class="mt-8">
+    <summary class="cursor-pointer text-sm font-medium text-slate-600">Ended (<%= @ended.size %>)</summary>
+    <ul class="card mt-3 divide-y divide-slate-100 p-0">
+      <% @ended.each do |s| %>
+        <li class="flex justify-between px-4 py-3 text-sm text-slate-600"><span><%= s.service %></span><span><%= s.amount_cents ? money(s.amount_cents, s.currency) : "" %></span></li>
+      <% end %>
+    </ul>
+  </details>
+<% end %>
+
+<section class="card mt-8">
+  <h2 class="font-semibold text-slate-900">Add receipts</h2>
+  <p class="mt-1 text-sm text-slate-600">
+    Forward receipts (Apple, Google Play, Netflix, Spotify, Stripe…) to your private address, or set up a forwarding rule in your email app:
+  </p>
+  <code class="mt-3 block select-all break-all rounded bg-slate-50 p-2 text-sm"><%= current_user.receipts_address %></code>
+</section>

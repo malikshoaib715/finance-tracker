@@ -33,6 +33,7 @@ Rails.application.routes.draw do
   resource :rule_application, only: :create, controller: "rules/applications"
   resources :budgets, except: :show
   resources :goals, except: :show
+  resources :subscriptions, only: :index
   resources :exchange_rates, only: %i[ index create destroy ]
   resource :reports, only: :show
   get "reports/year/(:year)", to: "reports/years#show", as: :reports_year
