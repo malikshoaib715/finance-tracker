@@ -1,6 +1,9 @@
 require "test_helper"
 
 class Reports::NetWorthTest < ActiveSupport::TestCase
+  # Fixtures are dated a few days into the current month; early in a month
+  # some would be in the future, so view the month from its last day.
+  setup { travel_to Date.current.end_of_month }
   test "adds opening balances to every movement up to each month end" do
     series = Reports::NetWorth.new(users(:ayesha), months: 2).series
 

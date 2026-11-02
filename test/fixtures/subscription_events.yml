@@ -1,0 +1,10 @@
+icloud_charge:
+  subscription: ayesha_icloud
+  kind: charged
+  occurred_on: <%= Date.current - 10 %>
+  amount_cents: 80000
+  currency: PKR
+  card_last4: "8685"
+  source: email
+  source_ref: msg-1
+  evidence: "no_reply@email.apple.com — Your receipt from Apple."

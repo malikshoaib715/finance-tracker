@@ -20,6 +20,7 @@ class User < ApplicationRecord
   has_many :exchange_rates, dependent: :delete_all
   has_many :api_tokens, dependent: :delete_all
   has_many :deletions, dependent: :delete_all
+  has_many :subscriptions, dependent: :destroy
   has_many :budgets, dependent: :delete_all
 
   after_create_commit -> { Category.create_defaults_for(self) }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_08_153703) do
+ActiveRecord::Schema[7.1].define(version: 2026_11_02_125648) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -252,6 +252,41 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_08_153703) do
     t.index ["user_id"], name: "index_rules_on_user_id"
   end
 
+  create_table "subscription_events", force: :cascade do |t|
+    t.bigint "subscription_id", null: false
+    t.string "kind", null: false
+    t.date "occurred_on", null: false
+    t.bigint "amount_cents"
+    t.string "currency", limit: 3
+    t.string "card_last4", limit: 4
+    t.string "source", null: false
+    t.string "source_ref"
+    t.string "evidence"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["source", "source_ref"], name: "index_subscription_events_on_source_and_source_ref", unique: true, where: "(source_ref IS NOT NULL)"
+    t.index ["subscription_id", "occurred_on"], name: "index_subscription_events_on_subscription_id_and_occurred_on"
+    t.index ["subscription_id"], name: "index_subscription_events_on_subscription_id"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "service", null: false
+    t.string "plan"
+    t.bigint "amount_cents"
+    t.string "currency", limit: 3
+    t.string "interval", default: "monthly", null: false
+    t.string "status", default: "active", null: false
+    t.string "billed_via", default: "direct", null: false
+    t.string "card_last4", limit: 4
+    t.date "last_charged_on"
+    t.date "next_renewal_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index "user_id, lower((service)::text)", name: "index_subscriptions_on_user_and_service", unique: true
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "taggings", force: :cascade do |t|
     t.bigint "transaction_id", null: false
     t.bigint "tag_id", null: false
@@ -357,6 +392,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_08_153703) do
   add_foreign_key "recurring_transactions", "users"
   add_foreign_key "rules", "categories", on_delete: :cascade
   add_foreign_key "rules", "users"
+  add_foreign_key "subscription_events", "subscriptions", on_delete: :cascade
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "taggings", "tags", on_delete: :cascade
   add_foreign_key "taggings", "transactions", on_delete: :cascade
   add_foreign_key "tags", "users"

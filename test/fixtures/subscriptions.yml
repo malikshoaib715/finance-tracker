@@ -1,0 +1,20 @@
+ayesha_icloud:
+  user: ayesha
+  service: iCloud+
+  plan: 200 GB
+  amount_cents: 80000
+  currency: PKR
+  interval: monthly
+  status: active
+  billed_via: apple
+  card_last4: "8685"
+  last_charged_on: <%= Date.current - 10 %>
+
+ayesha_drama:
+  user: ayesha
+  service: DramaBox
+  amount_cents: 110000
+  currency: PKR
+  interval: weekly
+  status: active
+  billed_via: apple
