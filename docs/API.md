@@ -42,6 +42,7 @@ Browser clients (like the Flutter web build) need their origin listed in the
 | `PATCH /api/v1/transactions/:id` | Update |
 | `DELETE /api/v1/transactions/:id` | Delete (leaves a tombstone) |
 | `GET /api/v1/deletions?since=…` | Tombstones for deleted records |
+| `GET /api/v1/subscriptions` | Detected subscriptions with monthly cost and alerts (failing payments, weekly plans, trials, price changes) |
 
 ### Creating a transaction
 
